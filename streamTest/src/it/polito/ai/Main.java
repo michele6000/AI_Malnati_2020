@@ -48,5 +48,11 @@ public class Main {
         // flusso io combinerò l'ementeo entrato con l'accumulatore precedente usando la funzione che ho passato
         // in questo caso l'operatore binario. Il flusso s2 comincia con 1, il primo elemento comporterà 1+0, che
         // diventerà il nuovo accumulatore, poi combinato con .25, e arrivo a 1.25 ecc..
+
+        Stream<Double> s4 = Stream.iterate(1.0, d -> d + 0.25).limit(10);
+        System.out.println(s4.reduce("", (a, b) -> a + " " + b, (a, b) -> a + " " + b));
+        // concetto di BiOperation vedi slide
+        // viene accumulato nelle stringa vuota tutti i numeri che avevo nello stream
+
     }
 }
