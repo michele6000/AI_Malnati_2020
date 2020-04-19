@@ -1,0 +1,94 @@
+<!--/*@thymesVar id="rcc" type="java"*/-->
+<!DOCTYPE html>
+<html lang="en" xmlns:th="www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Index - Register</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"
+            type="text/javascript"></script>
+    <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
+
+
+</head>
+
+
+<body onload="setPrivacy()">
+<div id="Titolo" style="display: none;">
+    <p></p>
+</div>
+<h2>
+    <noscript>
+        <p>Attenzione!</p>
+        <p>Senza JS abilitato il sito non può funzionare correttamente</p>
+    </noscript>
+</h2>
+
+<div id="container" style="width:100%;">
+    <form class="form" id="navleft" method="post" style="align-items: center;" th:action="@{/register}"
+          th:object="${command}">
+        <div id="login">
+            <h2>Insert here your data</h2>
+
+            <h3>Name:</h3>
+            <div class="field-wrap">
+                <input autocomplete="off" class="Box" id="name" placeholder="Name*"
+                       th:class="${#fields.hasErrors('name')} ? 'errorBox' : 'Box'"
+                       th:field="*{name}" type="text"/>
+                <div class="textRequired" th:errors="*{name}" th:if="${#fields.hasErrors('name')}"></div>
+            </div>
+
+            <h3>Surname:</h3>
+            <div class="field-wrap">
+                <input autocomplete="off" class="Box" id="surname" placeholder="Surname*"
+                       th:class="${#fields.hasErrors('surname')} ? 'errorBox' : 'Box'"
+                       th:field="*{surname}" type="text"/>
+                <div class="textRequired" th:errors="*{surname}" th:if="${#fields.hasErrors('surname')}"></div>
+            </div>
+
+            <h3>Email:</h3>
+            <div class="field-wrap">
+                <input autocomplete="off" class="Box" id="mail" placeholder="Email*"
+                       th:class="${#fields.hasErrors('email')} ? 'errorBox' : 'Box'"
+                       th:field="*{email}" type="email"/>
+                <div class="textRequired" th:errors="*{email}" th:if="${#fields.hasErrors('email')}"></div>
+            </div>
+
+            <h3>Chose a password:</h3>
+            <div class="field-wrap">
+                <input autocomplete="off" class="Box" id="psw1" placeholder="password*"
+                       th:class="${#fields.hasErrors('password')} ? 'errorBox' : 'Box'"
+                       th:field="*{password}" type="password"/>
+            </div>
+
+            <div class="field-wrap">
+                <input autocomplete="off" class="Box" id="psw2" placeholder="retype your password*"
+                       th:class="${#fields.hasErrors('password')} ? 'errorBox' : 'Box'" th:field="*{password2}"
+                       type="password"/>
+                <div class="textRequired" th:errors="*{password2}" th:if="${#fields.hasErrors('password2')}"></div>
+            </div>
+            <input class="Box" id="check_3" name="check_3" onclick="setPrivacy()" th:field="*{privacy}"
+                   type="checkbox"/>
+            <label for="check_3" id="privacyLabel">I do not agree to data privacy treatment**</label>
+            <div class="textRequired" th:errors="*{privacy}" th:if="${#fields.hasErrors('privacy')}"></div>
+
+
+            <button class="button button-block" type="submit">Submit</button>
+            <div class="textRequired">*Required **Click to change</div>
+
+        </div>
+    </form>
+</div>
+
+</body>
+
+<script>
+    function setPrivacy() {
+        document.getElementById("check_3").checked === true ?
+            document.getElementById("privacyLabel").innerHTML = "I agree to data privacy treatment**" :
+            document.getElementById("privacyLabel").innerHTML = "I do not agree to data privacy treatment**"
+    }
+</script>
+</html>
