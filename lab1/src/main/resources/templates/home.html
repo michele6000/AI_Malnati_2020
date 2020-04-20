@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="www.thymeleaf.org">
+<head>
+    <link href="style.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <title>Home (login)</title>
+</head>
+
+<body>
+<!-- MESSAGGIO DI ERRORE JAVASCRIPT NON ABILITATO -->
+<h2>
+    <noscript>
+        <p style="font-weight: bold; color: red ;">Attenzione!</p>
+        <p>Abilitare JavaScript per permettere al sito di funzionare correttamente!</p>
+    </noscript>
+</h2>
+
+<!-- FORM INFO -->
+<div class="form-info-container" style="margin-top: 60px;">
+
+    <div>
+        <h1>Welcome!</h1>
+    </div>
+
+    <form method="post" th:action="@{/login}" th:object="${command}">
+        <div class="container">
+            <label for="mail">E-mail</label>
+            <input class="box" id="mail" name="mail" placeholder="Email" th:class="${#fields.hasErrors('mail')} ? 'err-container' : 'box'" th:field="*{mail}"
+                   type="email">
+            <div class="invalid-feedback" th:errors="*{mail}" th:if="${#fields.hasErrors('mail')}"></div>
+        </div>
+        <div class="container" style="margin-bottom: 50px;">
+            <label for="password">Password</label>
+            <input class="box" id="password" name="password" placeholder="Password" th:class="${#fields.hasErrors('password')} ? 'err-container' : 'box'"
+                   th:field="*{password}"
+                   type="password">
+            <div class="invalid-feedback" th:errors="*{password}" th:if="${#fields.hasErrors('password')}"></div>
+        </div>
+        <div>
+            <button class="btn" id="login" name="login_btn" type="submit">LOGIN</button>
+        </div>
+        <p class="form_signup">Don't have an account?
+            <a class="signuplink" href="#" onclick="window.location='register'">Sign up</a>
+        </p>
+    </form>
+
+</div>
+
+</body>
+</html>
