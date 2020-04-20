@@ -20,9 +20,22 @@ public class Student {
     inverseJoinColumns = @JoinColumn(name = "course_name"))
     private List<Course> courses = new ArrayList<>();
 
+    @ManyToMany(mappedBy = "members")
+    private List<Team> teams = new ArrayList<>();
+
     public void addCourse(Course course){
         courses.add(course);
         course.getStudents().add(this);
+    }
+
+    public void addTeam(Team team){
+        this.teams.add(team);
+        team.getMembers().add(this);
+    }
+
+    public void rmTeam(Team team){
+        this.teams.remove(team);
+        team.getMembers().remove(this);
     }
 
 }

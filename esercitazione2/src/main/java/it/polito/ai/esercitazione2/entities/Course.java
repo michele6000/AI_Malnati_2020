@@ -2,10 +2,7 @@ package it.polito.ai.esercitazione2.entities;
 
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,8 +19,18 @@ public class Course {
     @ManyToMany(fetch = FetchType.EAGER,mappedBy = "courses")
     private List<Student> students = new ArrayList<>();
 
+    @OneToMany(mappedBy = "course")
+    private List<Team> teams;
+
     public void addStudent(Student student){
         students.add(student);
         student.getCourses().add(this);
     }
+
+    public void addTeam(Team team){
+        teams.add(team);
+        team.setCourse(this);
+    }
+
+
 }

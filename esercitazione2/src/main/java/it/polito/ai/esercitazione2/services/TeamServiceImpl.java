@@ -4,10 +4,13 @@ import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
 import it.polito.ai.esercitazione2.dtos.CourseDTO;
 import it.polito.ai.esercitazione2.dtos.StudentDTO;
+import it.polito.ai.esercitazione2.dtos.TeamDTO;
 import it.polito.ai.esercitazione2.entities.Course;
 import it.polito.ai.esercitazione2.entities.Student;
+import it.polito.ai.esercitazione2.entities.Team;
 import it.polito.ai.esercitazione2.repositories.CourseRepository;
 import it.polito.ai.esercitazione2.repositories.StudentRepository;
+import it.polito.ai.esercitazione2.repositories.TeamRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,6 +34,9 @@ public class TeamServiceImpl implements TeamService{
 
     @Autowired
      StudentRepository studentRepo;
+
+    @Autowired
+    TeamRepository teamRepo;
 
     @Override
     public boolean addCourse(CourseDTO course){
@@ -160,15 +166,135 @@ public class TeamServiceImpl implements TeamService{
     }
 
     @Override
-    public List<CourseDTO> addAndEnroll(Reader r, String courseName) {
+    public List<Boolean> addAndEnroll(Reader r, String courseName) {
+        List<Boolean> ret = new ArrayList<>();
         CsvToBean<StudentDTO> csvToBean = new CsvToBeanBuilder<StudentDTO>(r)
                 .withType(StudentDTO.class)
                 .withIgnoreLeadingWhiteSpace(true)
                 .build();
         List<StudentDTO> students = csvToBean.parse();
-
-        return null;
+        students.forEach(s->{
+            try{
+                ret.add(this.addStudent(s) ||
+                        this.addStudentToCourse(s.getId(), courseName));
+            }catch(StudentNotFoundException | CourseNotFoundException e){
+//                                System.out.println(e.getMessage() + " : " +s);
+                throw e;
+            }
+        });
+        return ret;
     }
 
+    @Override
+    public List<CourseDTO> getCourses(String studentId) {
+        if(!studentRepo.existsById(studentId))
+            throw new StudentNotFoundException("Studente non esistente!");
+        return studentRepo.getOne(studentId).getCourses()
+                .stream()
+                .map(l ->modelMapper.map(l,CourseDTO.class))
+                .collect(Collectors.toList())
+                ;
+
+    }
+
+    @Override
+    public List<TeamDTO> getTeamsForStudent(String studentId) {
+        if(!studentRepo.existsById(studentId))
+            throw new StudentNotFoundException("Studente non esistente!");
+        return studentRepo.getOne(studentId).getTeams()
+                .stream()
+                .map(t -> modelMapper.map(t,TeamDTO.class))
+                .collect(Collectors.toList())
+                ;
+    }
+
+    @Override
+    public List<StudentDTO> getMembers(Long teamId) {
+        if(!teamRepo.existsById(teamId))
+            throw new TeamNotFoundException("Team non esistente!");
+        return teamRepo.getOne(teamId).getMembers()
+                .stream()
+                .map(s-> modelMapper.map(s,StudentDTO.class))
+                .collect(Collectors.toList())
+                ;
+    }
+
+    @Override
+    public TeamDTO proposeTeam(String courseName, String name, List<String> membersIds) {
+        if(!courseRepo.existsById(courseName))
+            throw new CourseNotFoundException("Corso non esistente!");
+
+        Course crs =  courseRepo.getOne(courseName);
+
+        if(membersIds.size() > crs.getMax() || membersIds.size() < crs.getMin())
+            throw new TeamServiceException("Non sono rispettati i vincoli di dimensione!");
+
+        if(membersIds.size() != membersIds.stream().distinct().count())
+            throw new TeamServiceException("Il gruppo proposto contiene duplicati!");
+
+        membersIds.forEach(studentId -> {
+            //Lo studente esiste
+            if(!studentRepo.existsById(studentId))
+                throw new StudentNotFoundException("Studente non esistente!");
+
+            Student tmp = studentRepo.getOne(studentId);
+
+            //Lo studente è iscritto al corso
+            if(!crs.getStudents().contains(tmp))
+                throw new TeamServiceException("Lo studente "+studentId+" non appartiene al corso!");
+
+            //Lo studente non sia iscritto ad altri gruppi
+            crs.getTeams().forEach(t-> {
+                if(t.getMembers().contains(tmp))
+                    throw new TeamServiceException("Lo studente "+studentId+" appartiene già al team: "+t.getName());
+            });
+        });
+
+        if (!courseRepo.getOne(courseName).isEnable())
+            throw new TeamServiceException("Il corso è dibabilitato!");
+
+        Team team = new Team();
+        team.setName(name);
+        team.setCourse(crs);
+        membersIds.forEach(s->{
+            team.addMember(studentRepo.getOne(s));
+        });
+        team.setId(teamRepo.save(team).getId());
+
+        return modelMapper.map(team,TeamDTO.class);
+    }
+
+    @Override
+    public List<TeamDTO> getTeamForCourse(String courseName) {
+        if(!courseRepo.existsById(courseName))
+            throw new CourseNotFoundException("Corso non esistente!");
+        return courseRepo.getOne(courseName).getTeams()
+                .stream()
+                .map(l->modelMapper.map(l,TeamDTO.class))
+                .collect(Collectors.toList())
+                ;
+    }
+
+    @Override
+    public List<StudentDTO> getStudentsInTeams(String courseName) {
+        if(!courseRepo.existsById(courseName))
+            throw new CourseNotFoundException("Corso non esistente!");
+        return courseRepo.getStudentsInTeams(courseName)
+                .stream()
+                .map(s -> modelMapper.map(s,StudentDTO.class))
+                .collect(Collectors.toList())
+                ;
+    }
+
+    @Override
+    public List<StudentDTO> getAvailableStudents(String courseName) {
+        if(!courseRepo.existsById(courseName))
+            throw new CourseNotFoundException("Corso non esistente!");
+        return courseRepo.getStudentsNotInTeams(courseName)
+                .stream()
+                .map(s -> modelMapper.map(s,StudentDTO.class))
+                .collect(Collectors.toList())
+                ;
+    }
 
 }
