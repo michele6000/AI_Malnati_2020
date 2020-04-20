@@ -192,40 +192,40 @@ public class Esercitazione2Application {
                 System.out.println("\n################### TEST PROPOSE TEAM ###################");
 
                 System.out.println("\n1.Corso non esistente ");
-                try{
-                service.proposeTeam("MachineShinig","CodeOfGames",tmp2);
-                }catch (CourseNotFoundException e){
+                try {
+                    service.proposeTeam("MachineShinig", "CodeOfGames", tmp2);
+                } catch (CourseNotFoundException e) {
                     System.out.println("Eccezione : " + e.getMessage());
                 }
 
                 System.out.println("\n2.Vincoli non rispettati ");
-                try{
-                    service.proposeTeam("MachineLearning","CodeOfGames",new ArrayList<>());
-                }catch (TeamServiceException e){
+                try {
+                    service.proposeTeam("MachineLearning", "CodeOfGames", new ArrayList<>());
+                } catch (TeamServiceException e) {
                     System.out.println("Eccezione : " + e.getMessage());
                 }
 
                 System.out.println("\n3.Studenti duplicati ");
                 tmp2.add(s1.getId());
                 tmp2.add(s1.getId());
-                service.addStudentToCourse("s254332","MachineLearning");
-                try{
-                    service.proposeTeam("MachineLearning","CodeOfGames",tmp2);
-                }catch (TeamServiceException e){
+                service.addStudentToCourse("s254332", "MachineLearning");
+                try {
+                    service.proposeTeam("MachineLearning", "CodeOfGames", tmp2);
+                } catch (TeamServiceException e) {
                     System.out.println("Eccezione : " + e.getMessage());
                 }
 
                 System.out.println("\n4.Studente non esistente ");
-                tmp2.remove(tmp2.size()-1);
+                tmp2.remove(tmp2.size() - 1);
                 tmp2.add("s000000");
-                try{
-                    service.proposeTeam("MachineLearning","CodeOfGames",tmp2);
-                }catch (TeamServiceException e){
+                try {
+                    service.proposeTeam("MachineLearning", "CodeOfGames", tmp2);
+                } catch (TeamServiceException e) {
                     System.out.println("Eccezione : " + e.getMessage());
                 }
 
                 System.out.println("\n5.Studente non iscritto al corso ");
-                tmp2.remove(tmp2.size()-1);
+                tmp2.remove(tmp2.size() - 1);
 
                 StudentDTO s5 = new StudentDTO();
                 s5.setFirstName("Jamie");
@@ -234,214 +234,214 @@ public class Esercitazione2Application {
                 service.addStudent(s5);
 
                 tmp2.add(s5.getId());
-                try{
-                    service.proposeTeam("MachineLearning","CodeOfGames",tmp2);
-                }catch (TeamServiceException e){
+                try {
+                    service.proposeTeam("MachineLearning", "CodeOfGames", tmp2);
+                } catch (TeamServiceException e) {
                     System.out.println("Eccezione : " + e.getMessage());
                 }
 
                 System.out.println("\n6.Corso disabilitato ");
-                tmp2.remove(tmp2.size()-1);
+                tmp2.remove(tmp2.size() - 1);
                 service.disableCourse("MachineLearning");
-                try{
-                    service.proposeTeam("MachineLearning","CodeOfGames",tmp2);
-                }catch (TeamServiceException e){
+                try {
+                    service.proposeTeam("MachineLearning", "CodeOfGames", tmp2);
+                } catch (TeamServiceException e) {
                     System.out.println("Eccezione : " + e.getMessage());
                 }
 
                 System.out.println("\n7.Tutti i vincoli soddisfatti ");
                 service.enableCourse("MachineLearning");
-                try{
-                    TeamDTO test = service.proposeTeam("MachineLearning","CodeOfGames",tmp2);
+                try {
+                    TeamDTO test = service.proposeTeam("MachineLearning", "CodeOfGames", tmp2);
                     System.out.println(
-                            "ID: "+test.getId()+" "
-                                    +"COURSE: "+test.getCourse().getName()+" "
-                                    +"GROUP NAME: "+test.getName()+" "
-                                    +"STATUS: "+test.getStatus()
+                            "ID: " + test.getId() + " "
+                                    + "COURSE: " + test.getCourse().getName() + " "
+                                    + "GROUP NAME: " + test.getName() + " "
+                                    + "STATUS: " + test.getStatus()
                     );
-                }catch (TeamServiceException e){
+                } catch (TeamServiceException e) {
                     System.out.println("Eccezione : " + e.getMessage());
                 }
 
                 System.out.println("\n8.Studente gia in un gruppo");
                 tmp2.remove(0);
                 service.disableCourse("MachineLearning");
-                try{
-                    service.proposeTeam("MachineLearning","CodeOfGames",tmp2);
-                }catch (TeamServiceException e){
+                try {
+                    service.proposeTeam("MachineLearning", "CodeOfGames", tmp2);
+                } catch (TeamServiceException e) {
                     System.out.println("Eccezione : " + e.getMessage());
                 }
 
                 System.out.println("\n################### TEST GET TEAM FOR STUDENT ###################");
                 System.out.println("\n1.Studente non esistente");
-                try{
+                try {
                     service.getTeamsForStudent("s000000");
-                }catch (StudentNotFoundException e){
+                } catch (StudentNotFoundException e) {
                     System.out.println("Eccezione : " + e.getMessage());
                 }
 
                 System.out.println("\n2.Studente esistente");
-                try{
+                try {
                     List<TeamDTO> team = service.getTeamsForStudent("s251132");
                     if (team.isEmpty()) {
                         System.out.println("Studente non appartenente a nessun gruppo!");
                     } else {
-                        team.forEach(s->System.out.println(s.getName()));
+                        team.forEach(s -> System.out.println(s.getName()));
                     }
 
-                }catch (StudentNotFoundException e){
+                } catch (StudentNotFoundException e) {
                     System.out.println("Eccezione : " + e.getMessage());
                 }
 
                 System.out.println("\n3.Studente senza gruppo");
-                try{
+                try {
                     List<TeamDTO> team = service.getTeamsForStudent("s103499");
                     if (team.isEmpty()) {
                         System.out.println("Non appartiene a nessun gruppo");
                     } else {
-                        team.forEach(s->System.out.println(s.getName()));
+                        team.forEach(s -> System.out.println(s.getName()));
                     }
 
-                }catch (StudentNotFoundException e){
+                } catch (StudentNotFoundException e) {
                     System.out.println("Eccezione : " + e.getMessage());
                 }
 
                 System.out.println("\n################### TEST GET MEMBERS ###################");
                 System.out.println("\n1.Team non esistente");
-                try{
+                try {
                     List<StudentDTO> team = service.getMembers(355L);
-                    team.forEach(s->System.out.println(s.getId()));
+                    team.forEach(s -> System.out.println(s.getId()));
 
-                }catch (TeamNotFoundException e){
+                } catch (TeamNotFoundException e) {
                     System.out.println("Eccezione : " + e.getMessage());
                 }
 
                 System.out.println("\n2.Team esistente");
-                try{
+                try {
                     List<StudentDTO> team = service.getMembers(10L);
-                    team.forEach(s->System.out.println(s.getId()));
+                    team.forEach(s -> System.out.println(s.getId()));
 
-                }catch (TeamNotFoundException e){
+                } catch (TeamNotFoundException e) {
                     System.out.println("Eccezione : " + e.getMessage());
                 }
 
                 System.out.println("\n################### TEST GET COURSE TEAMS ###################");
                 System.out.println("\n1.Corso non esistente");
-                try{
+                try {
                     List<TeamDTO> team = service.getTeamForCourse("Apicoltura");
                     if (team.isEmpty()) {
                         System.out.println("Non c'e nessun gruppo");
                     } else {
-                        team.forEach(s->System.out.println(s.getName()));
+                        team.forEach(s -> System.out.println(s.getName()));
                     }
 
-                }catch (CourseNotFoundException e){
+                } catch (CourseNotFoundException e) {
                     System.out.println("Eccezione : " + e.getMessage());
                 }
 
                 System.out.println("\n2.Corso esistente");
-                try{
+                try {
                     List<TeamDTO> team = service.getTeamForCourse("MachineLearning");
                     if (team.isEmpty()) {
                         System.out.println("Non c'e nessun gruppo");
                     } else {
-                        team.forEach(s->System.out.println(s.getName()));
+                        team.forEach(s -> System.out.println(s.getName()));
                     }
 
-                }catch (CourseNotFoundException e){
+                } catch (CourseNotFoundException e) {
                     System.out.println("Eccezione : " + e.getMessage());
                 }
 
                 System.out.println("\n3.Corso senza gruppi");
-                try{
+                try {
                     List<TeamDTO> team = service.getTeamForCourse("ProgrammazioneDiSistema");
                     if (team.isEmpty()) {
                         System.out.println("Non c'e nessun gruppo");
                     } else {
-                        team.forEach(s->System.out.println(s.getName()));
+                        team.forEach(s -> System.out.println(s.getName()));
                     }
 
-                }catch (CourseNotFoundException e){
+                } catch (CourseNotFoundException e) {
                     System.out.println("Eccezione : " + e.getMessage());
                 }
 
                 System.out.println("\n################### TEST GET STUDENTS IN TEAMS ###################");
                 System.out.println("\n1.Corso non esistente");
-                try{
+                try {
                     List<StudentDTO> team = service.getStudentsInTeams("Apicoltura");
                     if (team.isEmpty()) {
                         System.out.println("Non c'e nessuno studente iscritto ad un gruppo!");
                     } else {
-                        team.forEach(s->System.out.println(s.getId()));
+                        team.forEach(s -> System.out.println(s.getId()));
                     }
 
-                }catch (CourseNotFoundException e){
+                } catch (CourseNotFoundException e) {
                     System.out.println("Eccezione : " + e.getMessage());
                 }
 
                 System.out.println("\n2.Corso esistente");
-                try{
+                try {
                     List<StudentDTO> team = service.getStudentsInTeams("MachineLearning");
                     if (team.isEmpty()) {
                         System.out.println("Non c'e nessuno studente iscritto ad un gruppo!");
                     } else {
-                        team.forEach(s->System.out.println(s.getId()));
+                        team.forEach(s -> System.out.println(s.getId()));
                     }
 
-                }catch (CourseNotFoundException e){
+                } catch (CourseNotFoundException e) {
                     System.out.println("Eccezione : " + e.getMessage());
                 }
 
                 System.out.println("\n3.Corso senza gruppi");
-                try{
+                try {
                     List<StudentDTO> team = service.getStudentsInTeams("ProgrammazioneDiSistema");
                     if (team.isEmpty()) {
                         System.out.println("Non c'e nessuno studente iscritto ad un gruppo!");
                     } else {
-                        team.forEach(s->System.out.println(s.getId()));
+                        team.forEach(s -> System.out.println(s.getId()));
                     }
 
-                }catch (CourseNotFoundException e){
+                } catch (CourseNotFoundException e) {
                     System.out.println("Eccezione : " + e.getMessage());
                 }
 
                 System.out.println("\n################### TEST GET  AVAIABLE STUDENTS ###################");
                 System.out.println("\n1.Corso non esistente");
-                try{
+                try {
                     List<StudentDTO> team = service.getAvailableStudents("Apicoltura");
                     if (team.isEmpty()) {
                         System.out.println("Tutti gli studenti fanno parte di un gruppo!");
                     } else {
-                        team.forEach(s->System.out.println(s.getId()));
+                        team.forEach(s -> System.out.println(s.getId()));
                     }
 
-                }catch (CourseNotFoundException e){
+                } catch (CourseNotFoundException e) {
                     System.out.println("Eccezione : " + e.getMessage());
                 }
 
                 System.out.println("\n2.Corso esistente");
-                try{
+                try {
                     List<StudentDTO> team = service.getAvailableStudents("MachineLearning");
                     if (team.isEmpty()) {
                         System.out.println("Tutti gli studenti fanno parte di un gruppo!");
                     } else {
-                        team.forEach(s->System.out.println(s.getId()));
+                        team.forEach(s -> System.out.println(s.getId()));
                     }
 
-                }catch (CourseNotFoundException e){
+                } catch (CourseNotFoundException e) {
                     System.out.println("Eccezione : " + e.getMessage());
                 }
 
                 System.out.println("\n3.Corso senza studenti disponibili");
-                try{
+                try {
                     List<StudentDTO> team = service.getAvailableStudents("Analisi1");
                     if (team.isEmpty()) {
                         System.out.println("Tutti gli studenti fanno parte di un gruppo!");
                     } else {
-                        team.forEach(s->System.out.println(s.getId()));
+                        team.forEach(s -> System.out.println(s.getId()));
                     }
 
-                }catch (CourseNotFoundException e){
+                } catch (CourseNotFoundException e) {
                     System.out.println("Eccezione : " + e.getMessage());
                 }
 
