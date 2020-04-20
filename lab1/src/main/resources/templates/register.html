@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="www.thymeleaf.org">
+<head>
+    <link href="style.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <title>Sign-up</title>
+</head>
+
+<body onload="agreedTerms()">
+<!-- FORM INFO -->
+<form method="post" th:action="@{/register}" th:object="${command}">
+    <div class="form-info-container"
+         style="width: 45%; transform: scale(0.8);">
+
+        <div>
+            <h1 style="margin-top: 40px;">Sign-up now!</h1>
+        </div>
+
+        <p>
+        <div class="container">
+            <label for="email">Name</label>
+            <input class="box" id="name" name="name" placeholder="Name" th:class="${#fields.hasErrors('name')} ? 'err-container' : 'box'" th:field="*{name}"
+                   type="text">
+            <div class="invalid-feedback" th:errors="*{name}" th:if="${#fields.hasErrors('name')}"></div>
+        </div>
+
+
+        <div class="container">
+            <label for="email">Surname</label>
+            <input class="box" id="surname" name="surname" placeholder="Surname" th:class="${#fields.hasErrors('surname')} ? 'err-container' : 'box'" th:field="*{surname}"
+                   type="text">
+            <div class="invalid-feedback" th:errors="*{surname}" th:if="${#fields.hasErrors('surname')}"></div>
+        </div>
+
+        <div class="container">
+            <label for="email">E-mail</label>
+            <input class="box" id="email" name="mail" placeholder="E-mail" th:class="${#fields.hasErrors('mail')} ? 'err-container' : 'box'" th:field="*{mail}"
+                   type="email">
+            <div class="invalid-feedback" th:errors="*{mail}" th:if="${#fields.hasErrors('mail')}"></div>
+        </div>
+
+        <div class="container">
+            <label for="password">Choose a password:</label>
+            <input class="box" id="password" name="password" placeholder="Password" th:class="${#fields.hasErrors('password')} ? 'err-container' : 'box'"
+                   th:field="*{password}"
+                   type="password">
+            <div class="invalid-feedback" th:errors="*{password}" th:if="${#fields.hasErrors('password')}"></div>
+        </div>
+        <div class="container">
+            <input class="box" id="password2" name="confirm-password" placeholder="Confirm your password"
+                   style="margin-top: 30px;" th:class="${#fields.hasErrors('password')} ? 'err-container' : 'box'"
+                   th:field="*{password2}"
+                   type="password">
+            <div class="invalid-feedback" th:errors="*{password2}" th:if="${#fields.hasErrors('password')}"></div>
+        </div>
+
+        <div style="margin-top: 50px;">
+            <label class="switch">
+                <input id="check-agreed" onclick="agreedTerms()" th:field="*{privacy_accepted}" type="checkbox">
+                <span class="slider"></span>
+            </label>
+            <span id="prv_t"
+                  style="margin-left:10px; position:absolute;
+                  margin-top: 4px; color: #859bae;
+                  font-size: 20px; font-weight: normal;
+                  display:inline;">
+            </span>
+        </div>
+        <div>
+            <div class="invalid-feedback" th:errors="*{privacy_accepted}"
+                 th:if="${#fields.hasErrors('privacy_accepted')}"></div>
+            <button class="btn" disabled id="signup" name="signup-btn" style="margin-bottom: 50px;" type="submit">
+                SUBMIT
+            </button>
+        </div>
+
+    </div>
+</form>
+
+
+<script>
+    function agreedTerms() {
+        if (document.getElementById("check-agreed").checked === false) {
+            document.getElementById("prv_t").innerHTML = "I do not agree privacy data treatment.";
+            document.getElementById("signup").disabled = true;
+        } else {
+            document.getElementById("prv_t").innerHTML = "I agree privacy data treatment.";
+            document.getElementById("signup").disabled = false;
+        }
+
+    }
+
+</script>
+
+</body>
