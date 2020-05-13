@@ -1,6 +1,6 @@
-package it.polito.ai.esercitazione2.dtos;
+package it.polito.ai.esercitazione3.dtos;
 
-import it.polito.ai.esercitazione2.entities.Course;
+import it.polito.ai.esercitazione3.entities.Course;
 import lombok.Data;
 
 @Data
