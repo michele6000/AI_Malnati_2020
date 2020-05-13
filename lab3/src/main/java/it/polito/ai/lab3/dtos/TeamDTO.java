@@ -1,6 +1,6 @@
-package it.polito.ai.lab2.dtos;
+package it.polito.ai.lab3.dtos;
 
-import it.polito.ai.lab2.entities.Course;
+import it.polito.ai.lab3.entities.Course;
 import lombok.Data;
 
 @Data

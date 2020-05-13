@@ -1,9 +1,10 @@
-package it.polito.ai.lab2.dtos;
+package it.polito.ai.lab3.dtos;
 
 import lombok.Data;
+import org.springframework.hateoas.RepresentationModel;
 
 @Data
-public class CourseDTO {
+public class CourseDTO extends RepresentationModel<CourseDTO> {
 
     private String name;
     private int min;

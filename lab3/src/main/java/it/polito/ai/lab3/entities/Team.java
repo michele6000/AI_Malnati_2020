@@ -1,4 +1,4 @@
-package it.polito.ai.lab2.entities;
+package it.polito.ai.lab3.entities;
 
 import lombok.Data;
 
