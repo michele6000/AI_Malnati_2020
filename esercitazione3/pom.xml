@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>it.polito.ai</groupId>
-    <artifactId>esercitazione2</artifactId>
+    <artifactId>esercitazione3</artifactId>
     <version>1.0.0</version>
-    <name>esercitazione2</name>
-    <description>esercitazione2</description>
+    <name>esercitazione3</name>
+    <description>esercitazione3</description>
 
     <properties>
         <java.version>1.8</java.version>
@@ -40,6 +40,10 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-hateoas</artifactId>
         </dependency>
 
         <dependency>
