@@ -315,5 +315,21 @@ public class TeamServiceImpl implements TeamService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public void setActive(Long teamId) {
+        if(!teamRepo.existsById(teamId))
+            throw new TeamServiceException("Team not found!");
+
+        teamRepo.getOne(teamId).setStatus(1);
+    }
+
+    @Override
+    public void evictTeam(Long teamId) {
+        if(!teamRepo.existsById(teamId))
+            throw new TeamServiceException("Team not found!");
+
+        teamRepo.deleteById(teamId);
+    }
+
 
 }

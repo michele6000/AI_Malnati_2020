@@ -1,6 +1,11 @@
 package it.polito.ai.lab3;
 
+import it.polito.ai.lab3.repositories.CourseRepository;
+import it.polito.ai.lab3.repositories.StudentRepository;
+import it.polito.ai.lab3.services.NotificationService;
+import it.polito.ai.lab3.services.TeamService;
 import org.modelmapper.ModelMapper;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -14,11 +19,11 @@ public class Lab3Application {
         SpringApplication.run(Lab3Application.class, args);
     }
 
-//    @Bean
-//    public CommandLineRunner runner(CourseRepository courseRepo, StudentRepository studentRepo, TeamService service) {
-//        return new CommandLineRunner() {
-//            @Override
-//            public void run(String... args) throws Exception {
+    @Bean
+    public CommandLineRunner runner(CourseRepository courseRepo, StudentRepository studentRepo, TeamService service, NotificationService mail) {
+        return new CommandLineRunner() {
+            @Override
+            public void run(String... args) throws Exception {
 //                //courseRepo.findAll().stream().forEach(c->System.out.println(c));
 //                //studentRepo.findAll().stream().forEach(s->System.out.println(s));
 //
@@ -312,9 +317,10 @@ public class Lab3Application {
 //                    System.out.println(e.getMessage());
 //                }
 //
-//            }
-//        };
-//    }
+                mail.sendMessage("paola.caso96@gmail.com", "prova", "ciao sono il lab3!");
+           }
+     };
+    }
 
     @Bean
     public ModelMapper modelMapper() {
