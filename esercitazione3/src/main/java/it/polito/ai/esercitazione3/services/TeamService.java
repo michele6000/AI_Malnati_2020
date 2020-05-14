@@ -49,4 +49,8 @@ public interface TeamService {
     List<StudentDTO> getStudentsInTeams(String courseName);
 
     List<StudentDTO> getAvailableStudents(String courseName);
+
+    boolean setActive(Long id);
+
+    boolean evictTeam(Long id);
 }

@@ -1,6 +1,11 @@
 package it.polito.ai.esercitazione3;
 
+import it.polito.ai.esercitazione3.repositories.CourseRepository;
+import it.polito.ai.esercitazione3.repositories.StudentRepository;
+import it.polito.ai.esercitazione3.services.NotificationService;
+import it.polito.ai.esercitazione3.services.TeamService;
 import org.modelmapper.ModelMapper;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -14,11 +19,11 @@ public class Esercitazione3Application {
         SpringApplication.run(Esercitazione3Application.class, args);
     }
 
-//    @Bean
-//    public CommandLineRunner runner(CourseRepository repoC, StudentRepository repoS, TeamService service) {
-//        return new CommandLineRunner() {
-//            @Override
-//            public void run(String... args) throws Exception {
+    @Bean
+    public CommandLineRunner runner(CourseRepository repoC, StudentRepository repoS, TeamService service, NotificationService email) {
+        return new CommandLineRunner() {
+            @Override
+            public void run(String... args) throws Exception {
 ////                repo.findAll().stream().forEach(c -> System.out.println(c));
 ////                repoC.findAll().forEach(System.out::println);
 ////                repoS.findAll().forEach(System.out::println);
@@ -431,9 +436,10 @@ public class Esercitazione3Application {
 //                    System.out.println("Eccezione : " + e.getMessage());
 //                }
 //
-//            }
-//        };
-//    }
+                email.sendMessage("grecomichele96@gmail.com","Test","Ciao pa come stai?");
+            }
+        };
+    }
 
     @Bean
     ModelMapper modelMapper() {
