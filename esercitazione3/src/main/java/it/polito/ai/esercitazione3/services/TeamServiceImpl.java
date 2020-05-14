@@ -251,7 +251,7 @@ public class TeamServiceImpl implements TeamService {
         });
 
         if (!courseRepo.getOne(courseName).isEnable())
-            throw new TeamServiceException("Il corso è dibabilitato!");
+            throw new TeamServiceException("Il corso è disabilitato!");
 
         Team team = new Team();
         team.setName(name);
@@ -295,6 +295,24 @@ public class TeamServiceImpl implements TeamService {
                 .map(s -> modelMapper.map(s, StudentDTO.class))
                 .collect(Collectors.toList())
                 ;
+    }
+
+    @Override
+    public boolean setActive(Long id) {
+        if(teamRepo.existsById(id)){
+            teamRepo.getOne(id).setStatus(1);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean evictTeam(Long id) {
+        if(teamRepo.existsById(id)){
+            teamRepo.deleteById(id);
+            return true;
+        }
+        return false;
     }
 
 }
