@@ -1,6 +1,8 @@
 package it.polito.ai.esercitazione3.controllers;
 
+import it.polito.ai.esercitazione3.dtos.CourseDTO;
 import it.polito.ai.esercitazione3.dtos.StudentDTO;
+import it.polito.ai.esercitazione3.dtos.TeamDTO;
 import it.polito.ai.esercitazione3.services.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -38,5 +40,23 @@ public class StudentController {
         if (result.isPresent())
             return ModelHelper.enrich(result.get());
         throw new ResponseStatusException(HttpStatus.CONFLICT, id);
+    }
+
+    @GetMapping("/{id}/getCourses")
+    public List<CourseDTO> getStudentCourses(@PathVariable String id) {
+        try {
+            return service.getCourses(id);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, id);
+        }
+    }
+
+    @GetMapping("/{id}/getTeams")
+    public List<TeamDTO> getStudentTeams(@PathVariable String id) {
+        try {
+            return service.getTeamsForStudent(id);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, id);
+        }
     }
 }

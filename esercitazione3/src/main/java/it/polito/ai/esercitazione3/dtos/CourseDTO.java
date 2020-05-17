@@ -1,6 +1,7 @@
 package it.polito.ai.esercitazione3.dtos;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.springframework.hateoas.RepresentationModel;
 
 @Data

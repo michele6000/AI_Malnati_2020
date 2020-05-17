@@ -3,23 +3,23 @@ package it.polito.ai.esercitazione3.services;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
 import it.polito.ai.esercitazione3.dtos.CourseDTO;
+import it.polito.ai.esercitazione3.dtos.ProfessorDTO;
 import it.polito.ai.esercitazione3.dtos.StudentDTO;
 import it.polito.ai.esercitazione3.dtos.TeamDTO;
-import it.polito.ai.esercitazione3.entities.Course;
-import it.polito.ai.esercitazione3.entities.Student;
-import it.polito.ai.esercitazione3.entities.Team;
-import it.polito.ai.esercitazione3.repositories.CourseRepository;
-import it.polito.ai.esercitazione3.repositories.StudentRepository;
-import it.polito.ai.esercitazione3.repositories.TeamRepository;
+import it.polito.ai.esercitazione3.entities.*;
+import it.polito.ai.esercitazione3.exceptions.CourseNotFoundException;
+import it.polito.ai.esercitazione3.exceptions.StudentNotFoundException;
+import it.polito.ai.esercitazione3.exceptions.TeamNotFoundException;
+import it.polito.ai.esercitazione3.exceptions.TeamServiceException;
+import it.polito.ai.esercitazione3.repositories.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.io.Reader;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -38,6 +38,28 @@ public class TeamServiceImpl implements TeamService {
     @Autowired
     TeamRepository teamRepo;
 
+    @Autowired
+    UserRepository users;
+
+    @Autowired
+    ProfessorRepository professors;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
+    @Autowired
+    NotificationService notify;
+
+    @Override
+    public void userSaver(String username, String password, String role) {
+        users.save(User.builder()
+                .username(username)
+                .password(passwordEncoder.encode(password))
+                .role(role)
+                .build()
+        );
+    }
+
     @Override
     public boolean addCourse(CourseDTO course) {
         if (course == null) return false;
@@ -53,6 +75,7 @@ public class TeamServiceImpl implements TeamService {
         Student _student = modelMapper.map(student, Student.class);
         if (studentRepo.existsById(_student.getId())) return false;
         studentRepo.save(_student);
+        this.userSaver(student.getId(), student.getId(), "ROLE_STUDENT");
         return true;
     }
 
@@ -63,11 +86,11 @@ public class TeamServiceImpl implements TeamService {
             throw new StudentNotFoundException("Studente non esistente!");
         if (!courseRepo.existsById(courseName))
             throw new CourseNotFoundException("Corso non esistente!");
-        if (!courseRepo.getOne(courseName).isEnable())
+        if (!courseRepo.getOne(courseName).isEnabled())
             return false;
         Course _course = courseRepo.getOne(courseName);
 
-        if (!_course.isEnable())
+        if (!_course.isEnabled())
             return false;
 
         Optional<Student> found = _course.getStudents().stream()
@@ -127,9 +150,9 @@ public class TeamServiceImpl implements TeamService {
     public void enableCourse(String courseName) {
         if (!courseRepo.existsById(courseName))
             throw new CourseNotFoundException("Corso non esistente!");
-        if (courseRepo.getOne(courseName).isEnable())
+        if (courseRepo.getOne(courseName).isEnabled())
             return;
-        courseRepo.getOne(courseName).setEnable(true);
+        courseRepo.getOne(courseName).setEnabled(true);
 
     }
 
@@ -137,9 +160,9 @@ public class TeamServiceImpl implements TeamService {
     public void disableCourse(String courseName) {
         if (!courseRepo.existsById(courseName))
             throw new CourseNotFoundException("Corso non esistente!");
-        if (!courseRepo.getOne(courseName).isEnable())
+        if (!courseRepo.getOne(courseName).isEnabled())
             return;
-        courseRepo.getOne(courseName).setEnable(false);
+        courseRepo.getOne(courseName).setEnabled(false);
     }
 
     @Override
@@ -250,7 +273,7 @@ public class TeamServiceImpl implements TeamService {
             });
         });
 
-        if (!courseRepo.getOne(courseName).isEnable())
+        if (!courseRepo.getOne(courseName).isEnabled())
             throw new TeamServiceException("Il corso è disabilitato!");
 
         Team team = new Team();
@@ -299,7 +322,7 @@ public class TeamServiceImpl implements TeamService {
 
     @Override
     public boolean setActive(Long id) {
-        if(teamRepo.existsById(id)){
+        if (teamRepo.existsById(id)) {
             teamRepo.getOne(id).setStatus(1);
             return true;
         }
@@ -308,11 +331,36 @@ public class TeamServiceImpl implements TeamService {
 
     @Override
     public boolean evictTeam(Long id) {
-        if(teamRepo.existsById(id)){
+        if (teamRepo.existsById(id)) {
             teamRepo.deleteById(id);
             return true;
         }
         return false;
+    }
+
+    @Override
+    public boolean addProfesor(ProfessorDTO professor) {
+        if(professor == null){
+            return false;
+        }
+        String id = professor.getId();
+        if(professors.findById(id).isPresent()){
+            return false;
+        }
+        User user = new User();
+        Random random = new Random();
+        String password = random.ints(97, 122)
+                .limit(8)
+                .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
+                .toString();
+        user.setUsername(professor.getId() + "@polito.it");
+        user.setPassword(passwordEncoder.encode(password));
+        user.setRole("ROLE_PROFESSOR");
+        User u = users.save(modelMapper.map(user, User.class));
+        professor.setUserId(u.getId());
+        professors.save(modelMapper.map(professor, Professor.class));
+        notify.sendMessage("grecomichele96@gmail.com", "Nuova Registrazione", "Username: " + user.getUsername() + " password: " + password);
+        return true;
     }
 
 }
