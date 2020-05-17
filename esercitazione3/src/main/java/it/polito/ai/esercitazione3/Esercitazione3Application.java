@@ -463,17 +463,17 @@ public class Esercitazione3Application {
 //        };
 //    }
 
-    @Bean
-    public CommandLineRunner runner(CourseRepository repoC, StudentRepository repoS, TeamService service, NotificationService email, UserRepository users, PasswordEncoder passwordEncoder) {
-        return args -> {
-            ProfessorDTO tmp = new ProfessorDTO();
-            tmp.setUserId(50L);
-            tmp.setId("michele");
-            tmp.setName("giovanni");
-            tmp.setFirstName("malnati");
-            service.addProfesor(tmp);
-        };
-    }
+//    @Bean
+//    public CommandLineRunner runner(CourseRepository repoC, StudentRepository repoS, TeamService service, NotificationService email, UserRepository users, PasswordEncoder passwordEncoder) {
+//        return args -> {
+//            ProfessorDTO tmp = new ProfessorDTO();
+//            tmp.setUserId(50L);
+//            tmp.setId("michele");
+//            tmp.setName("giovanni");
+//            tmp.setFirstName("malnati");
+//            service.addProfesor(tmp);
+//        };
+//    }
 
     @Bean
     ModelMapper modelMapper() {

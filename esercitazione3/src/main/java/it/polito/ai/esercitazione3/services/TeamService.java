@@ -81,7 +81,7 @@ public interface TeamService {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     void userSaver(String username, String password, String role);
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+//    @PreAuthorize("hasRole('ROLE_ADMIN')")
     boolean addProfesor(ProfessorDTO professor);
 
 }
