@@ -8,16 +8,20 @@ import it.polito.ai.lab3.dtos.TeamDTO;
 import it.polito.ai.lab3.entities.Course;
 import it.polito.ai.lab3.entities.Student;
 import it.polito.ai.lab3.entities.Team;
+import it.polito.ai.lab3.entities.User;
 import it.polito.ai.lab3.repositories.CourseRepository;
 import it.polito.ai.lab3.repositories.StudentRepository;
 import it.polito.ai.lab3.repositories.TeamRepository;
+import it.polito.ai.lab3.repositories.UserRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.io.Reader;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -38,6 +42,12 @@ public class TeamServiceImpl implements TeamService {
     @Autowired
     private TeamRepository teamRepo;
 
+    @Autowired
+    private UserRepository userRepo;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Override
     public boolean addCourse(CourseDTO course) {
         if (course == null || course.getName().length() == 0)
@@ -57,6 +67,7 @@ public class TeamServiceImpl implements TeamService {
         if (studentRepo.existsById(studentEntity.getId()))
             return false;
         studentRepo.save(studentEntity);
+        addUser(student.getId(), student.getId(), Collections.singletonList("ROLE_STUDENT"));
         return true;
 
     }
@@ -329,6 +340,15 @@ public class TeamServiceImpl implements TeamService {
             throw new TeamServiceException("Team not found!");
 
         teamRepo.deleteById(teamId);
+    }
+
+    @Override
+    public void addUser(String username, String password, List<String> role) {
+        userRepo.save(User.builder()
+                .username(username)
+                .password(passwordEncoder.encode(password))
+                .roles(role)
+                .build());
     }
 
 

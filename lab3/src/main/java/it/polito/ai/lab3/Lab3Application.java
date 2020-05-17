@@ -1,7 +1,9 @@
 package it.polito.ai.lab3;
 
+import it.polito.ai.lab3.entities.User;
 import it.polito.ai.lab3.repositories.CourseRepository;
 import it.polito.ai.lab3.repositories.StudentRepository;
+import it.polito.ai.lab3.repositories.UserRepository;
 import it.polito.ai.lab3.services.NotificationService;
 import it.polito.ai.lab3.services.TeamService;
 import org.modelmapper.ModelMapper;
@@ -9,6 +11,9 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.util.Arrays;
 
 @SpringBootApplication
 public class Lab3Application {
@@ -20,7 +25,7 @@ public class Lab3Application {
     }
 
     @Bean
-    public CommandLineRunner runner(CourseRepository courseRepo, StudentRepository studentRepo, TeamService service, NotificationService mail) {
+    public CommandLineRunner runner(CourseRepository courseRepo, StudentRepository studentRepo, TeamService service, NotificationService mail, UserRepository userRepo, PasswordEncoder passwordEncoder) {
         return new CommandLineRunner() {
             @Override
             public void run(String... args) throws Exception {
@@ -317,7 +322,15 @@ public class Lab3Application {
 //                    System.out.println(e.getMessage());
 //                }
 //
-                mail.sendMessage("paola.caso96@gmail.com", "prova", "ciao sono il lab3!");
+//                mail.sendMessage("paola.caso96@gmail.com", "prova", "ciao sono il lab3!");
+
+//                userRepo.save(User.builder().username("admin")
+//                .password(passwordEncoder.encode("admin"))
+//                .roles(Arrays.asList("ROLE_USER","ROLE_ADMIN"))
+//                .build());
+
+                System.out.println("ALL USERS:\n");
+                userRepo.findAll().forEach(u->System.out.println("User: "+u.toString()));
            }
      };
     }

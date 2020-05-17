@@ -45,12 +45,18 @@ public class NotificationServiceImpl implements NotificationService {
         //token not existent
         if(!tokenRepo.existsById(token))
             return false;
-        //token expired
-        if(tokenRepo.findAllByExpiryBefore(new Timestamp(new Date().getTime())).stream().anyMatch(t -> t.getId().equals(token)))
-            return false;
 
         Long teamId=tokenRepo.getOne(token).getTeamId();
+
+        //token expired
+        if(tokenRepo.findAllByExpiryDateBefore(new Timestamp(new Date().getTime())).stream()
+                .anyMatch(t -> t.getId().equals(token))) {
+            teamService.evictTeam(teamId);
+            return false;
+        }
+
         tokenRepo.deleteById(token);
+
         if(tokenRepo.findAllByTeamId(teamId).size()==0){
             try {
                 teamService.setActive(teamId);
@@ -69,7 +75,7 @@ public class NotificationServiceImpl implements NotificationService {
         if(!tokenRepo.existsById(token))
             return false;
         //token expired
-        if(tokenRepo.findAllByExpiryBefore(new Timestamp(new Date().getTime())).stream().anyMatch(t -> t.getId().equals(token)))
+        if(tokenRepo.findAllByExpiryDateBefore(new Timestamp(new Date().getTime())).stream().anyMatch(t -> t.getId().equals(token)))
             return false;
 
         Long teamId=tokenRepo.getOne(token).getTeamId();
@@ -97,8 +103,8 @@ public class NotificationServiceImpl implements NotificationService {
             token.setExpiryDate(expiryDate);
             tokenRepo.save(token);
             String address="s"+m+"@studenti.polito.it";
-            String body="CONFIRM participation to the team: "+URL_BASE+"/notification/confirm/"+id+
-                    "\nREJECT participation to the team: "+URL_BASE+"/notification/reject/"+id;
+            String body="CONFIRM participation to the team: "+URL_BASE+"/notifications/confirm/"+id+
+                    "\nREJECT participation to the team: "+URL_BASE+"/notifications/reject/"+id;
             this.sendMessage(address,"Team proposal",body);
         }
 
