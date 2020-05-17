@@ -1,5 +1,6 @@
-package it.polito.ai.lab3.security;
+package it.polito.ai.lab3.services;
 
+import it.polito.ai.lab3.entities.User;
 import it.polito.ai.lab3.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -9,17 +10,15 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class CustomUserDetailsService implements UserDetailsService {
-
     @Autowired
-    private UserRepository users;
-
-    public CustomUserDetailsService(UserRepository users) {
-        this.users = users;
-    }
+    UserRepository userRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return this.users.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("Username: " + username + " not found!"));
+        User user = userRepository.findByUsername(username);
+        if(user == null) {
+            throw new UsernameNotFoundException(username);
+        }
+        return user;
     }
 }

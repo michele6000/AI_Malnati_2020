@@ -24,11 +24,11 @@ public class Lab3Application {
         SpringApplication.run(Lab3Application.class, args);
     }
 
-    @Bean
-    public CommandLineRunner runner(CourseRepository courseRepo, StudentRepository studentRepo, TeamService service, NotificationService mail, UserRepository userRepo, PasswordEncoder passwordEncoder) {
-        return new CommandLineRunner() {
-            @Override
-            public void run(String... args) throws Exception {
+//    @Bean
+//    public CommandLineRunner runner(CourseRepository courseRepo, StudentRepository studentRepo, TeamService service, NotificationService mail, UserRepository userRepo, PasswordEncoder passwordEncoder) {
+//        return new CommandLineRunner() {
+//            @Override
+//            public void run(String... args) throws Exception {
 //                //courseRepo.findAll().stream().forEach(c->System.out.println(c));
 //                //studentRepo.findAll().stream().forEach(s->System.out.println(s));
 //
@@ -328,12 +328,24 @@ public class Lab3Application {
 //                .password(passwordEncoder.encode("admin"))
 //                .roles(Arrays.asList("ROLE_USER","ROLE_ADMIN"))
 //                .build());
+//
+//                System.out.println("ALL USERS:\n");
+//                userRepo.findAll().forEach(u->System.out.println("User: "+u.toString()));
+//           }
+//     };
+//    }
 
-                System.out.println("ALL USERS:\n");
-                userRepo.findAll().forEach(u->System.out.println("User: "+u.toString()));
-           }
-     };
-    }
+    //    @Bean
+//    public CommandLineRunner runner(CourseRepository repoC, StudentRepository repoS, TeamService service, NotificationService email, UserRepository users, PasswordEncoder passwordEncoder) {
+//        return args -> {
+//            ProfessorDTO tmp = new ProfessorDTO();
+//            tmp.setUserId(50L);
+//            tmp.setId("paola");
+//            tmp.setName("paola");
+//            tmp.setFirstName("caso");
+//            service.addProfesor(tmp);
+//        };
+//    }
 
     @Bean
     public ModelMapper modelMapper() {

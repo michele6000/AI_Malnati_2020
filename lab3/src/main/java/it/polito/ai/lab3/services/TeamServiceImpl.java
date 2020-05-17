@@ -3,16 +3,14 @@ package it.polito.ai.lab3.services;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
 import it.polito.ai.lab3.dtos.CourseDTO;
+import it.polito.ai.lab3.dtos.ProfessorDTO;
 import it.polito.ai.lab3.dtos.StudentDTO;
 import it.polito.ai.lab3.dtos.TeamDTO;
-import it.polito.ai.lab3.entities.Course;
-import it.polito.ai.lab3.entities.Student;
-import it.polito.ai.lab3.entities.Team;
-import it.polito.ai.lab3.entities.User;
-import it.polito.ai.lab3.repositories.CourseRepository;
-import it.polito.ai.lab3.repositories.StudentRepository;
-import it.polito.ai.lab3.repositories.TeamRepository;
-import it.polito.ai.lab3.repositories.UserRepository;
+import it.polito.ai.lab3.entities.*;
+import it.polito.ai.lab3.exceptions.CourseNotFoundException;
+import it.polito.ai.lab3.exceptions.StudentNotFoundException;
+import it.polito.ai.lab3.exceptions.TeamServiceException;
+import it.polito.ai.lab3.repositories.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,10 +18,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.io.Reader;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -47,6 +42,12 @@ public class TeamServiceImpl implements TeamService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private ProfessorRepository profRepo;
+
+    @Autowired
+    private NotificationService notification;
 
     @Override
     public boolean addCourse(CourseDTO course) {
@@ -349,6 +350,31 @@ public class TeamServiceImpl implements TeamService {
                 .password(passwordEncoder.encode(password))
                 .roles(role)
                 .build());
+    }
+
+    @Override
+    public boolean addProfesor(ProfessorDTO professor) {
+        if(professor == null){
+            return false;
+        }
+        String id = professor.getId();
+        if(profRepo.findById(id).isPresent()){
+            return false;
+        }
+        User user = new User();
+        Random random = new Random();
+        String password = random.ints(97, 122)
+                .limit(8)
+                .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
+                .toString();
+        user.setUsername(professor.getId() + "@polito.it");
+        user.setPassword(passwordEncoder.encode(password));
+        user.setRoles(Collections.singletonList("ROLE_PROFESSOR"));
+        User u = userRepo.save(modelMapper.map(user, User.class));
+        professor.setUserId(u.getId());
+        profRepo.save(modelMapper.map(professor, Professor.class));
+        notification.sendMessage("paola.caso96@gmail.com", "Nuova Registrazione", "Username: " + user.getUsername() + " password: " + password);
+        return true;
     }
 
 

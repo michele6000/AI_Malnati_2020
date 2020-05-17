@@ -23,6 +23,9 @@ public class Course {
     @ManyToMany(mappedBy = "courses")
     private List<Student> students = new ArrayList<>();
 
+    @ManyToMany(mappedBy = "courses")
+    List<Professor> professors = new ArrayList<>();
+
     @OneToMany(mappedBy = "course")
     private List<Team> teams;
 
@@ -35,4 +38,17 @@ public class Course {
         teams.add(team);
         team.setCourse(this);
     }
+
+    public boolean addProfessor(Professor p){
+        if(professors.contains(p)){
+            return false;
+        }
+        if(professors.add(p)){
+            p.courses.add(this);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 }
