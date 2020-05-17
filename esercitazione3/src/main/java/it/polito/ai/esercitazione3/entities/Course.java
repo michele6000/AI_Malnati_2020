@@ -1,5 +1,6 @@
 package it.polito.ai.esercitazione3.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -14,10 +15,13 @@ public class Course {
     private String name;
     private int min;
     private int max;
-    private boolean enable;
+    private boolean enabled;
 
     @ManyToMany(fetch = FetchType.EAGER, mappedBy = "courses")
     private List<Student> students = new ArrayList<>();
+
+    @ManyToMany(mappedBy = "courses")
+    List<Professor> professors = new ArrayList<>();
 
     @OneToMany(mappedBy = "course")
     private List<Team> teams;
@@ -30,6 +34,18 @@ public class Course {
     public void addTeam(Team team) {
         teams.add(team);
         team.setCourse(this);
+    }
+
+    public boolean addProfessor(Professor p){
+        if(professors.contains(p)){
+            return false;
+        }
+        if(professors.add(p)){
+            p.courses.add(this);
+            return true;
+        } else {
+            return false;
+        }
     }
 
 

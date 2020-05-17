@@ -2,8 +2,10 @@ package it.polito.ai.esercitazione3.controllers;
 
 import it.polito.ai.esercitazione3.dtos.CourseDTO;
 import it.polito.ai.esercitazione3.dtos.StudentDTO;
-import it.polito.ai.esercitazione3.services.CourseNotFoundException;
-import it.polito.ai.esercitazione3.services.StudentNotFoundException;
+import it.polito.ai.esercitazione3.dtos.TeamDTO;
+import it.polito.ai.esercitazione3.exceptions.CourseNotFoundException;
+import it.polito.ai.esercitazione3.services.NotificationService;
+import it.polito.ai.esercitazione3.exceptions.StudentNotFoundException;
 import it.polito.ai.esercitazione3.services.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,6 +25,8 @@ public class CourseController {
 
     @Autowired
     TeamService service;
+    @Autowired
+    NotificationService nService;
 
 
     @GetMapping({"", "/"})
@@ -41,6 +45,26 @@ public class CourseController {
 
     }
 
+    @PostMapping("/{name}/enable")
+    public boolean enableCourse(@PathVariable String name) {
+        try {
+            service.enableCourse(name);
+            return true;
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+    }
+
+    @PostMapping("/{name}/disable")
+    public boolean disableCourse(@PathVariable String name) {
+        try {
+            service.disableCourse(name);
+            return true;
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+    }
+
     @GetMapping("/{name}")
     public CourseDTO getOne(@PathVariable String name) {
         Optional<CourseDTO> result = service.getCourse(name);
@@ -49,6 +73,7 @@ public class CourseController {
         throw new ResponseStatusException(HttpStatus.CONFLICT, name);
 
     }
+
 
     @GetMapping("/{name}/enrolled")
     public List<StudentDTO> enrolledStudents(@PathVariable String name) {
@@ -82,6 +107,47 @@ public class CourseController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Enrolling: " + file.getName() + ".csv - " + name + ". Error : " + e.getMessage());
         }
     }
+
+    @PostMapping("/{courseName}/proposeTeam")
+    public String proposeTeam(@PathVariable String courseName, @RequestParam String name, @RequestBody List<String> membersIds) {
+        TeamDTO tmp;
+        try {
+            tmp = service.proposeTeam(courseName, name, membersIds);
+            nService.notifyTeam(tmp, membersIds);
+            return "Team: "+tmp.getName()+" - Proposta effettuata correttamente!";
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+    }
+
+    @GetMapping("/{courseName}/getTeams")
+    public List<TeamDTO> getTeams(@PathVariable String courseName){
+        try {
+            return service.getTeamForCourse(courseName);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+    }
+
+    @GetMapping("/{courseName}/getFreeStudent")
+    public List<StudentDTO> getFreeStudents(@PathVariable String courseName){
+        try {
+            return service.getAvailableStudents(courseName);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+    }
+
+    @GetMapping("/{courseName}/getBusyStudent")
+    public List<StudentDTO> getBusyStudents(@PathVariable String courseName){
+        try {
+            return service.getStudentsInTeams(courseName);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+    }
+
+
 }
 
 

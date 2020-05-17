@@ -2,6 +2,7 @@ package it.polito.ai.esercitazione3.services;
 
 import it.polito.ai.esercitazione3.dtos.TeamDTO;
 
+import javax.mail.MessagingException;
 import java.util.List;
 
 public interface NotificationService {

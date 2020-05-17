@@ -1,4 +1,4 @@
-package it.polito.ai.esercitazione3.services;
+package it.polito.ai.esercitazione3.exceptions;
 
 public class StudentNotFoundException extends TeamServiceException {
 
