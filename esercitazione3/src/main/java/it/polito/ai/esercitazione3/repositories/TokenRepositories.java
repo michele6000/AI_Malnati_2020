@@ -9,7 +9,7 @@ import java.util.List;
 
 @Repository
 public interface TokenRepositories  extends JpaRepository<Token,String> {
-    List<Token>findAllByExpiryBefore(Timestamp t);
+    List<Token>findAllByExpiryDateBefore(Timestamp t);
     List<Token>findAllByTeamId(Long teamId);
 
 }

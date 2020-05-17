@@ -1,5 +1,6 @@
 package it.polito.ai.esercitazione3.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -9,7 +10,7 @@ import java.util.List;
 @Data
 @Entity
 public class Team {
-
+    @JsonIgnore
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(name = "team_members", joinColumns = @JoinColumn(name = "team_id"),
             inverseJoinColumns = @JoinColumn(name = "student_id"))
@@ -19,6 +20,7 @@ public class Team {
     private Long id;
     private String name;
     private int status;
+
     @ManyToOne
     @JoinColumn(name = "course_id")
     private Course course;
