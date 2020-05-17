@@ -1,6 +1,10 @@
 package it.polito.ai.lab3.controllers;
 
+import it.polito.ai.lab3.dtos.CourseDTO;
 import it.polito.ai.lab3.dtos.StudentDTO;
+import it.polito.ai.lab3.dtos.TeamDTO;
+import it.polito.ai.lab3.services.CourseNotFoundException;
+import it.polito.ai.lab3.services.StudentNotFoundException;
 import it.polito.ai.lab3.services.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -44,5 +48,27 @@ public class StudentController {
         if (!service.addStudent(dto))
             throw new ResponseStatusException(HttpStatus.CONFLICT, dto.getId());
         else return ModelHelper.enrich(dto);
+    }
+
+    @GetMapping("/{id}/courses")
+    public List<CourseDTO> getCourses(@PathVariable String id) {
+        try{
+            List<CourseDTO> courses=service.getCourses(id);
+            return courses;
+        }
+        catch(StudentNotFoundException e){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
+
+    @GetMapping("/{id}/teams")
+    public List<TeamDTO> getTeamsForStudent(@PathVariable String id) {
+        try{
+            List<TeamDTO> teams=service.getTeamsForStudent(id);
+            return teams;
+        }
+        catch(StudentNotFoundException e){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
     }
 }

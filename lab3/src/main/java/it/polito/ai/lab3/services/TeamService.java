@@ -54,4 +54,7 @@ public interface TeamService {
     void setActive (Long teamId);
 
     void evictTeam (Long teamId);
+
+    void addUser(String username, String password, List<String> role);
+
 }

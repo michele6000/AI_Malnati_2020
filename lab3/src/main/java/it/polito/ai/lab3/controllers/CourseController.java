@@ -2,9 +2,8 @@ package it.polito.ai.lab3.controllers;
 
 import it.polito.ai.lab3.dtos.CourseDTO;
 import it.polito.ai.lab3.dtos.StudentDTO;
-import it.polito.ai.lab3.services.CourseNotFoundException;
-import it.polito.ai.lab3.services.StudentNotFoundException;
-import it.polito.ai.lab3.services.TeamService;
+import it.polito.ai.lab3.dtos.TeamDTO;
+import it.polito.ai.lab3.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +23,8 @@ public class CourseController {
 
     @Autowired
     TeamService service;
+    @Autowired
+    NotificationService notifService;
 
     @GetMapping({"", "/"})
     public List<CourseDTO> all() {
@@ -65,6 +66,32 @@ public class CourseController {
         else return ModelHelper.enrich(dto);
     }
 
+    @PostMapping("/{name}/enable")
+    public boolean enableCourse(@PathVariable String name) {
+
+        try{
+            service.enableCourse(name);
+            return true;
+        }
+        catch(CourseNotFoundException e){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+
+        }
+    }
+
+    @PostMapping("/{name}/disable")
+    public boolean disableCourse(@PathVariable String name) {
+
+        try{
+            service.disableCourse(name);
+            return true;
+        }
+        catch(CourseNotFoundException e){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+
+        }
+    }
+
     @PostMapping("/{name}/enrollOne")
     public StudentDTO enrollOne(@PathVariable String name, @RequestBody StudentDTO student) {
 
@@ -91,5 +118,48 @@ public class CourseController {
         }
     }
 
+    @PostMapping("/{courseName}/proposeTeam")
+    public boolean proposeTeam(@PathVariable String courseName, @RequestParam String name, @RequestBody List<String> membersIds){
+        TeamDTO team;
+        try{
+            team=service.proposeTeam(courseName,name,membersIds);
+            notifService.notifyTeam(team,membersIds);
+            return true;
+        }
+        catch(TeamServiceException e){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+    }
+
+    @GetMapping("/{courseName}/teams")
+    public List<TeamDTO> getTeamsForCourse(@PathVariable String courseName) {
+        try{
+            List<TeamDTO> teams=service.getTeamForCourse(courseName);
+            return teams;
+        }
+        catch(CourseNotFoundException e){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
+    @GetMapping("/{courseName}/availableStudents")
+    public List<StudentDTO> getAvailableStudents(@PathVariable String courseName) {
+        try{
+            List<StudentDTO> students=service.getAvailableStudents(courseName);
+            return students;
+        }
+        catch(CourseNotFoundException e){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
+    @GetMapping("/{courseName}/studentsInTeams")
+    public List<StudentDTO> getStudentsInTeams(@PathVariable String courseName) {
+        try{
+            List<StudentDTO> students=service.getStudentsInTeams(courseName);
+            return students;
+        }
+        catch(CourseNotFoundException e){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
 
 }
