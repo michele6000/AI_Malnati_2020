@@ -6,6 +6,7 @@ import it.polito.ai.esercitazione3.repositories.TeamRepository;
 import it.polito.ai.esercitazione3.repositories.TokenRepositories;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -29,6 +30,9 @@ public class NotificationServiceImpl implements NotificationService{
     TokenRepositories tokenRepo;
     @Autowired
     TeamService teamService;
+
+    @Value("${service.sendTo}")
+    private String sendTo;
 
     @Scheduled(fixedRate = 600000)
     public void reportCurrentTime() {
@@ -98,7 +102,8 @@ public class NotificationServiceImpl implements NotificationService{
             String body = "Accept by click here : http://localhost:8080/notification/confirm/"+token +"<br>"+
                         "Decline by click here:http://localhost:8080/notification/reject/"+token;
 
-//            this.sendMessage("s256665@studenti.polito.it","Team Propose",body);
+
+            this.sendMessage(sendTo,"Team Propose",body);
         });
     }
     

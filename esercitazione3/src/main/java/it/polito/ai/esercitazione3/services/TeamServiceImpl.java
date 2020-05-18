@@ -14,6 +14,7 @@ import it.polito.ai.esercitazione3.exceptions.TeamServiceException;
 import it.polito.ai.esercitazione3.repositories.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -49,6 +50,9 @@ public class TeamServiceImpl implements TeamService {
 
     @Autowired
     NotificationService notify;
+
+    @Value("${service.sendTo}")
+    private String sendTo;
 
     @Override
     public boolean addCourse(CourseDTO course) {
@@ -361,7 +365,7 @@ public class TeamServiceImpl implements TeamService {
         user.setRole("ROLE_PROFESSOR");
         User u = users.save(modelMapper.map(user, User.class));
         professors.save(modelMapper.map(professor, Professor.class));
-        notify.sendMessage("grecomichele96@gmail.com", "Nuova Registrazione", "Username: " + user.getUsername() + "<br>Password: " + password);
+        notify.sendMessage(sendTo, "Nuova Registrazione", "Username: " + user.getUsername() + "<br>Password: " + password);
         return true;
     }
 
