@@ -12,76 +12,73 @@ import java.util.Optional;
 
 public interface TeamService {
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_PROFESSOR')")
     boolean addCourse(CourseDTO course);
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_PROFESSOR','ROLE_STUDENT')")
     Optional<CourseDTO> getCourse(String name);
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_PROFESSOR')")
     List<CourseDTO> getAllCourses();
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_PROFESSOR')")
     boolean addStudent(StudentDTO student);
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_PROFESSOR')")
     Optional<StudentDTO> getStudent(String studentId);
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_PROFESSOR')")
     List<StudentDTO> getAllStudents();
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_PROFESSOR')")
     List<StudentDTO> getEnrolledStudents(String courseName);
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_PROFESSOR')")
     boolean addStudentToCourse(String studentId, String courseName);
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_PROFESSOR')")
     void enableCourse(String courseName);
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_PROFESSOR')")
     void disableCourse(String courseName);
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_PROFESSOR')")
     List<Boolean> addAll(List<StudentDTO> students);
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_PROFESSOR')")
     List<Boolean> enrollAll(List<String> studentsIds, String courseName);
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_PROFESSOR')")
     List<Boolean> addAndEnroll(Reader r, String courseName);
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_STUDENT')")
     List<CourseDTO> getCourses(String studentId);
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_STUDENT')")
     List<TeamDTO> getTeamsForStudent(String studentId);
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_PROFESSOR','ROLE_STUDENT')")
     List<StudentDTO> getMembers(Long teamId);
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_STUDENT')")
     TeamDTO proposeTeam(String courseId, String name, List<String> membersIds);
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_PROFESSOR','ROLE_STUDENT')")
     List<TeamDTO> getTeamForCourse(String courseName);
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_PROFESSOR','ROLE_STUDENT')")
     List<StudentDTO> getStudentsInTeams(String courseName);
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_PROFESSOR','ROLE_STUDENT')")
     List<StudentDTO> getAvailableStudents(String courseName);
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     boolean setActive(Long id);
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     boolean evictTeam(Long id);
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    void userSaver(String username, String password, String role);
+    boolean addProfessor(ProfessorDTO professor);
 
-//    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    boolean addProfesor(ProfessorDTO professor);
-
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    boolean addProfessorToCourse(String professorId, String courseName);
 }

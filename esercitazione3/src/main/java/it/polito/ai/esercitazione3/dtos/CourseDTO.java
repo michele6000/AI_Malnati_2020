@@ -10,6 +10,6 @@ public class CourseDTO extends RepresentationModel<CourseDTO> {
     String name;
     int min;
     int max;
-    boolean enable;
+    boolean enabled;
 
 }

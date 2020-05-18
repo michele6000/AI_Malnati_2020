@@ -19,7 +19,6 @@ public class Professor {
     )
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     List<Course> courses = new ArrayList<>();
-    Long userId;
 
     public boolean addCourses(Course c){
         if(courses.contains(c)){

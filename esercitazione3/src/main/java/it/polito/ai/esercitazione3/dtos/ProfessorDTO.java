@@ -7,7 +7,6 @@ public class ProfessorDTO {
     String id;
     String firstName;
     String name;
-    Long userId;
 
 }
 

@@ -6,14 +6,17 @@ import it.polito.ai.esercitazione3.repositories.TeamRepository;
 import it.polito.ai.esercitazione3.repositories.TokenRepositories;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import javax.xml.crypto.Data;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.sql.Timestamp;
 import java.util.List;
@@ -28,19 +31,25 @@ public class NotificationServiceImpl implements NotificationService{
     @Autowired
     TeamService teamService;
 
+    @Value("${service.sendTo}")
+    private String sendTo;
+
+    @Scheduled(fixedRate = 600000)
+    public void reportCurrentTime() {
+        Date date = new Date();
+        System.out.println("Hey you! I'm cleaning expired token !");
+        tokenRepo.findAllByExpiryDateBefore(new Timestamp(date.getTime())).forEach(token -> {
+            tokenRepo.delete(token);
+            teamService.evictTeam(token.getTeamId());
+        });
+    }
+
     @Override
     public void sendMessage(String address, String subject, String body) {
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(address);
-        message.setSubject(subject);
-        message.setText(messageBuilder("Team service notification","Student","Click to accept/reject",body," "));
-        emailSender.send(message);
-
         MimeMessage mimeMessage = emailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
-        String htmlMsg = "<h3>Hello World!</h3>";
         try {
-            helper.setText(messageBuilder("Team service notification","Student","Click to accept/reject",body," "), true); // Use this or above line.
+            helper.setText(messageBuilder("Team service notification","",body,"Enjoy!"," "), true); // Use this or above line.
             helper.setTo(address);
             helper.setSubject(subject);
             emailSender.send(mimeMessage);
@@ -81,7 +90,6 @@ public class NotificationServiceImpl implements NotificationService{
     public void notifyTeam(TeamDTO team, List<String> membersIds) {
         Date date = new Date();
         Timestamp expire = new Timestamp(DateUtils.addHours(date,1).getTime());
-
         membersIds.forEach(id ->{
             String token = UUID.randomUUID().toString();
             Token memberToken = new Token();
@@ -91,10 +99,11 @@ public class NotificationServiceImpl implements NotificationService{
             tokenRepo.save(memberToken);
 
             String email ="s"+id+"@studenti.polito.it";
-            String body = "Accept by click here : http://localhost:8080/API/notification/confirm/"+token +
-                        "\nDecline by click here:http://localhost:8080/API/notification/reject/"+token;
+            String body = "Accept by click here : http://localhost:8080/notification/confirm/"+token +"<br>"+
+                        "Decline by click here:http://localhost:8080/notification/reject/"+token;
 
-            this.sendMessage("s256665@studenti.polito.it","Team Propose",body);
+
+            this.sendMessage(sendTo,"Team Propose",body);
         });
     }
     

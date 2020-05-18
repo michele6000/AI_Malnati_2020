@@ -36,7 +36,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/media/**").permitAll()
-                .antMatchers("/API/notification").permitAll()
+                .antMatchers("/notification/**").permitAll()
                 .antMatchers("/auth/signin").permitAll()
                 .antMatchers(HttpMethod.GET, "/API/**").authenticated()
                 .antMatchers(HttpMethod.POST, "/API/**").authenticated()
@@ -46,10 +46,4 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .apply(new JwtConfigurer(jwtTokenProvider));
     }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
 }

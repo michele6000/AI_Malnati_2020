@@ -14,6 +14,7 @@ import it.polito.ai.esercitazione3.exceptions.TeamServiceException;
 import it.polito.ai.esercitazione3.repositories.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -50,15 +51,8 @@ public class TeamServiceImpl implements TeamService {
     @Autowired
     NotificationService notify;
 
-    @Override
-    public void userSaver(String username, String password, String role) {
-        users.save(User.builder()
-                .username(username)
-                .password(passwordEncoder.encode(password))
-                .role(role)
-                .build()
-        );
-    }
+    @Value("${service.sendTo}")
+    private String sendTo;
 
     @Override
     public boolean addCourse(CourseDTO course) {
@@ -74,8 +68,21 @@ public class TeamServiceImpl implements TeamService {
         if (student == null) return false;
         Student _student = modelMapper.map(student, Student.class);
         if (studentRepo.existsById(_student.getId())) return false;
+
+        User user = new User();
+        Random random = new Random();
+        String password = random.ints(97, 122)
+                .limit(8)
+                .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
+                .toString();
+        user.setUsername(student.getId() + "@studenti.polito.it");
+        user.setPassword(passwordEncoder.encode(password));
+        user.setRole("ROLE_STUDENT");
+        User u = users.save(modelMapper.map(user, User.class));
         studentRepo.save(_student);
-        this.userSaver(student.getId(), student.getId(), "ROLE_STUDENT");
+        notify.sendMessage("grecomichele96@gmail.com", "Nuova Registrazione",
+                "Username: " + user.getUsername() + " password: " + password);
+
         return true;
     }
 
@@ -339,7 +346,7 @@ public class TeamServiceImpl implements TeamService {
     }
 
     @Override
-    public boolean addProfesor(ProfessorDTO professor) {
+    public boolean addProfessor(ProfessorDTO professor) {
         if(professor == null){
             return false;
         }
@@ -357,10 +364,27 @@ public class TeamServiceImpl implements TeamService {
         user.setPassword(passwordEncoder.encode(password));
         user.setRole("ROLE_PROFESSOR");
         User u = users.save(modelMapper.map(user, User.class));
-        professor.setUserId(u.getId());
         professors.save(modelMapper.map(professor, Professor.class));
-        notify.sendMessage("grecomichele96@gmail.com", "Nuova Registrazione", "Username: " + user.getUsername() + " password: " + password);
+        notify.sendMessage(sendTo, "Nuova Registrazione", "Username: " + user.getUsername() + "<br>Password: " + password);
         return true;
+    }
+
+    @Override
+    public boolean addProfessorToCourse(String professorId, String courseName){
+        Optional<Course> optionalCourseEntity = courseRepo.findById(courseName);
+        if(!optionalCourseEntity.isPresent()){
+            throw new TeamServiceException("Corso " + courseName +  " non esistente");
+        }
+        Optional<Professor> optionalProfessorEntity = professors.findById(professorId);
+        if(!optionalProfessorEntity.isPresent()){
+            throw new TeamServiceException("Professore con id " + professorId + " non esistente");
+        }
+        if(optionalCourseEntity.get().isEnabled()){
+            return optionalCourseEntity.get().addProfessor(optionalProfessorEntity.get());
+        } else {
+            throw new TeamServiceException("Corso " + courseName +  " non abilitato");
+        }
+
     }
 
 }

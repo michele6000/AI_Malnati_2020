@@ -40,12 +40,9 @@ public class Course {
         if(professors.contains(p)){
             return false;
         }
-        if(professors.add(p)){
-            p.courses.add(this);
-            return true;
-        } else {
-            return false;
-        }
+        professors.add(p);
+        p.courses.add(this);
+        return true;
     }
 
 

@@ -12,4 +12,5 @@ public class StudentDTO extends RepresentationModel<StudentDTO> {
     String name;
     @CsvBindByName
     String firstName;
+
 }
