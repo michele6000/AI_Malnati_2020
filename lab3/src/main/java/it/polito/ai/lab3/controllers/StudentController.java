@@ -51,22 +51,20 @@ public class StudentController {
 
     @GetMapping("/{id}/courses")
     public List<CourseDTO> getCourses(@PathVariable String id) {
-        try{
-            List<CourseDTO> courses=service.getCourses(id);
+        try {
+            List<CourseDTO> courses = service.getCourses(id);
             return courses;
-        }
-        catch(StudentNotFoundException e){
+        } catch (StudentNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
 
     @GetMapping("/{id}/teams")
     public List<TeamDTO> getTeamsForStudent(@PathVariable String id) {
-        try{
-            List<TeamDTO> teams=service.getTeamsForStudent(id);
+        try {
+            List<TeamDTO> teams = service.getTeamsForStudent(id);
             return teams;
-        }
-        catch(StudentNotFoundException e){
+        } catch (StudentNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }

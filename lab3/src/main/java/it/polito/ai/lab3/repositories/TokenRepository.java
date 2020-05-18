@@ -8,8 +8,9 @@ import java.sql.Timestamp;
 import java.util.List;
 
 @Repository
-public interface TokenRepository extends JpaRepository<Token,String> {
+public interface TokenRepository extends JpaRepository<Token, String> {
 
-    List<Token> findAllByExpiryDateBefore (Timestamp t);
-    List<Token> findAllByTeamId (Long teamId);
+    List<Token> findAllByExpiryDateBefore(Timestamp t);
+
+    List<Token> findAllByTeamId(Long teamId);
 }

@@ -16,7 +16,6 @@ public class ModelHelper {
 
         Link enrolledStudLink = linkTo(CourseController.class).slash(course.getName()).slash("enrolled").withRel("enrolled");
         course.add(enrolledStudLink);
-
         return course;
 
     }

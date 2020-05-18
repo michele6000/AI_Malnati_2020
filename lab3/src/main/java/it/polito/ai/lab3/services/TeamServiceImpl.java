@@ -67,8 +67,21 @@ public class TeamServiceImpl implements TeamService {
         Student studentEntity = modelMapper.map(student, Student.class);
         if (studentRepo.existsById(studentEntity.getId()))
             return false;
+
+        User user = new User();
+        Random random = new Random();
+        String password = random.ints(97, 122)
+                .limit(8)
+                .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
+                .toString();
+        user.setUsername(student.getId() + "@studenti.polito.it");
+        user.setPassword(passwordEncoder.encode(password));
+        user.setRoles(Collections.singletonList("ROLE_STUDENT"));
+        User u = userRepo.save(modelMapper.map(user, User.class));
+
         studentRepo.save(studentEntity);
-        addUser(student.getId(), student.getId(), Collections.singletonList("ROLE_STUDENT"));
+        notification.sendMessage("paola.caso96@gmail.com", "Nuova Registrazione",
+                "Username: " + user.getUsername() + " password: " + password);
         return true;
 
     }
@@ -329,7 +342,7 @@ public class TeamServiceImpl implements TeamService {
 
     @Override
     public void setActive(Long teamId) {
-        if(!teamRepo.existsById(teamId))
+        if (!teamRepo.existsById(teamId))
             throw new TeamServiceException("Team not found!");
 
         teamRepo.getOne(teamId).setStatus(1);
@@ -337,28 +350,19 @@ public class TeamServiceImpl implements TeamService {
 
     @Override
     public void evictTeam(Long teamId) {
-        if(!teamRepo.existsById(teamId))
+        if (!teamRepo.existsById(teamId))
             throw new TeamServiceException("Team not found!");
 
         teamRepo.deleteById(teamId);
     }
 
     @Override
-    public void addUser(String username, String password, List<String> role) {
-        userRepo.save(User.builder()
-                .username(username)
-                .password(passwordEncoder.encode(password))
-                .roles(role)
-                .build());
-    }
-
-    @Override
-    public boolean addProfesor(ProfessorDTO professor) {
-        if(professor == null){
+    public boolean addProfessor(ProfessorDTO professor) {
+        if (professor == null) {
             return false;
         }
         String id = professor.getId();
-        if(profRepo.findById(id).isPresent()){
+        if (profRepo.findById(id).isPresent()) {
             return false;
         }
         User user = new User();
@@ -367,15 +371,31 @@ public class TeamServiceImpl implements TeamService {
                 .limit(8)
                 .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
                 .toString();
-        user.setUsername(professor.getId() + "@polito.it");
+        user.setUsername(id + "@polito.it");
         user.setPassword(passwordEncoder.encode(password));
         user.setRoles(Collections.singletonList("ROLE_PROFESSOR"));
-        User u = userRepo.save(modelMapper.map(user, User.class));
-        professor.setUserId(u.getId());
+        userRepo.save(modelMapper.map(user, User.class));
         profRepo.save(modelMapper.map(professor, Professor.class));
-        notification.sendMessage("paola.caso96@gmail.com", "Nuova Registrazione", "Username: " + user.getUsername() + " password: " + password);
+        notification.sendMessage(user.getUsername(), "New user",
+                "Username: " + user.getUsername() + "\nPassword: " + password);
         return true;
     }
 
+    @Override
+    public boolean addProfessorToCourse(String professorId, String courseName) {
+        Optional<Course> optionalCourseEntity = courseRepo.findById(courseName);
+        if (!optionalCourseEntity.isPresent()) {
+            throw new CourseNotFoundException("Course not found!");
+        }
+        Optional<Professor> optionalProfessorEntity = profRepo.findById(professorId);
+        if (!optionalProfessorEntity.isPresent()) {
+            throw new StudentNotFoundException("Professor not found!");
+        }
+        if (optionalCourseEntity.get().isEnabled()) {
+            optionalCourseEntity.get().addProfessor(optionalProfessorEntity.get());
+            return true;
+        } else throw new TeamServiceException("Course not enabled");
+
+    }
 
 }

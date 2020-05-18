@@ -33,7 +33,7 @@ public class JwtTokenFilter extends GenericFilterBean {
                 }
             }
             filterChain.doFilter(req, res);
-        } catch (JwtException e){
+        } catch (JwtException e) {
             res.getWriter().println(e.getMessage());
         }
     }

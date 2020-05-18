@@ -1,10 +1,13 @@
 package it.polito.ai.lab3.controllers;
-import it.polito.ai.lab3.services.NotificationService;
+
 import it.polito.ai.lab3.exceptions.TeamServiceException;
+import it.polito.ai.lab3.services.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 
 @Controller
@@ -27,10 +30,9 @@ public class NotificationController {
             }
 
             return "notifications";
-        }
-        catch(TeamServiceException e){
+        } catch (TeamServiceException e) {
             model.addAttribute("success", "display:none;");
-            model.addAttribute("message", "EXCEPTION!-->"+e.getMessage());
+            model.addAttribute("message", "EXCEPTION!-->" + e.getMessage());
             return "notifications";
         }
     }
@@ -48,12 +50,11 @@ public class NotificationController {
             }
 
             return "notifications";
-        }
-        catch(TeamServiceException e){
+        } catch (TeamServiceException e) {
             model.addAttribute("success", "display:none;");
-            model.addAttribute("message", "EXCEPTION!-->"+e.getMessage());
+            model.addAttribute("message", "EXCEPTION!-->" + e.getMessage());
             return "notifications";
-            
+
         }
     }
 }

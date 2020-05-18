@@ -1,4 +1,5 @@
 package it.polito.ai.lab3.dtos;
+
 import lombok.Data;
 
 import java.sql.Timestamp;
