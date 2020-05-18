@@ -22,8 +22,6 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class User implements UserDetails {
     @Id
-    @GeneratedValue
-    Long id;
     String username;
     String password;
     String role;
