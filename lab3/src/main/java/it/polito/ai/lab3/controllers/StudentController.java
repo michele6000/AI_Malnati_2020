@@ -7,11 +7,14 @@ import it.polito.ai.lab3.exceptions.StudentNotFoundException;
 import it.polito.ai.lab3.services.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/API/students")
@@ -51,6 +54,9 @@ public class StudentController {
 
     @GetMapping("/{id}/courses")
     public List<CourseDTO> getCourses(@PathVariable String id) {
+
+        if(!isMe(id))
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not allowed to access this information!");
         try {
             List<CourseDTO> courses = service.getCourses(id);
             return courses;
@@ -61,11 +67,26 @@ public class StudentController {
 
     @GetMapping("/{id}/teams")
     public List<TeamDTO> getTeamsForStudent(@PathVariable String id) {
+        if(!isMe(id))
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not allowed to access this information!");
         try {
-            List<TeamDTO> teams = service.getTeamsForStudent(id);
-            return teams;
+            return service.getTeamsForStudent(id);
         } catch (StudentNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
+    }
+
+    private String getCurrentUsername(){
+        return SecurityContextHolder.getContext().getAuthentication().getName().split("@")[0];
+    }
+
+    private List<String> getCurrentRoles(){
+        return SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream()
+                .map(a -> ((GrantedAuthority) a).getAuthority())
+                .collect(Collectors.toList());
+    }
+
+    private boolean isMe(String id){
+        return id.equals(getCurrentUsername()) || !getCurrentRoles().contains("ROLE_STUDENT");
     }
 }

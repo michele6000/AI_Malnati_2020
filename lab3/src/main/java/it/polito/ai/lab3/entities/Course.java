@@ -13,8 +13,6 @@ import java.util.List;
 @Data
 public class Course {
 
-    @ManyToMany(mappedBy = "courses")
-    List<Professor> professors = new ArrayList<>();
     @Id
     private String name;
     private int min;
@@ -24,6 +22,8 @@ public class Course {
     private List<Student> students = new ArrayList<>();
     @OneToMany(mappedBy = "course")
     private List<Team> teams;
+    @ManyToMany(mappedBy = "courses")
+    List<Professor> professors = new ArrayList<>();
 
     public void addStudent(Student student) {
         students.add(student);
@@ -35,16 +35,9 @@ public class Course {
         team.setCourse(this);
     }
 
-    public boolean addProfessor(Professor p) {
-        if (professors.contains(p)) {
-            return false;
-        }
-        if (professors.add(p)) {
-            p.courses.add(this);
-            return true;
-        } else {
-            return false;
-        }
+    public void addProfessor(Professor p) {
+        professors.add(p);
+        p.getCourses().add(this);
     }
 
 }

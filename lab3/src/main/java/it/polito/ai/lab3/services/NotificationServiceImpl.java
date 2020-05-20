@@ -22,7 +22,9 @@ import java.util.UUID;
 @Transactional
 public class NotificationServiceImpl implements NotificationService {
 
-    final static String URL_BASE = "http://localhost:8080/API";
+    final static String URL_BASE="http://localhost:8080/API";
+
+    boolean everythingOk;
 
     @Autowired
     public JavaMailSender emailSender;
@@ -48,11 +50,10 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    @Scheduled(fixedRate = 600000)
+    @Scheduled(fixedRate=600000)
     public void deleteExpiredTokens() {
         tokenRepo.findAllByExpiryDateBefore(new Timestamp(new Date().getTime()))
-                .forEach(t -> {
-                            teamService.evictTeam(t.getTeamId());
+                .forEach(t->{teamService.evictTeam(t.getTeamId());
                             tokenRepo.delete(t);
                         }
                 );
@@ -60,14 +61,17 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     public boolean confirm(String token) {
+
+        everythingOk=false;
+
         //token not existent
-        if (!tokenRepo.existsById(token))
+        if(!tokenRepo.existsById(token))
             return false;
 
-        Long teamId = tokenRepo.getOne(token).getTeamId();
+        Long teamId=tokenRepo.getOne(token).getTeamId();
 
         //token expired
-        if (tokenRepo.findAllByExpiryDateBefore(new Timestamp(new Date().getTime())).stream()
+        if(tokenRepo.findAllByExpiryDateBefore(new Timestamp(new Date().getTime())).stream()
                 .anyMatch(t -> t.getId().equals(token))) {
             teamService.evictTeam(teamId);
             return false;
@@ -75,31 +79,35 @@ public class NotificationServiceImpl implements NotificationService {
 
         tokenRepo.deleteById(token);
 
-        if (tokenRepo.findAllByTeamId(teamId).size() == 0) {
+        if(tokenRepo.findAllByTeamId(teamId).size()==0){
             try {
                 teamService.setActive(teamId);
                 return true;
-            } catch (TeamServiceException e) {
+            }
+            catch(TeamServiceException e){
                 throw e;
             }
-        } else return false;
+        }
+        else everythingOk=true;
+            return false;
     }
 
     @Override
     public boolean reject(String token) {
         //token not existent
-        if (!tokenRepo.existsById(token))
+        if(!tokenRepo.existsById(token))
             return false;
         //token expired
-        if (tokenRepo.findAllByExpiryDateBefore(new Timestamp(new Date().getTime())).stream().anyMatch(t -> t.getId().equals(token)))
+        if(tokenRepo.findAllByExpiryDateBefore(new Timestamp(new Date().getTime())).stream().anyMatch(t -> t.getId().equals(token)))
             return false;
 
-        Long teamId = tokenRepo.getOne(token).getTeamId();
-        tokenRepo.findAllByTeamId(teamId).forEach(t -> tokenRepo.delete(t));
+        Long teamId=tokenRepo.getOne(token).getTeamId();
+        tokenRepo.findAllByTeamId(teamId).forEach(t->tokenRepo.delete(t));
         try {
             teamService.evictTeam(teamId);
             return true;
-        } catch (TeamServiceException e) {
+        }
+        catch(TeamServiceException e){
             throw e;
         }
     }
@@ -107,22 +115,26 @@ public class NotificationServiceImpl implements NotificationService {
     @Override
     public void notifyTeam(TeamDTO dto, List<String> memberIds) {
 
-        Long teamId = dto.getId();
+        Long teamId=dto.getId();
         Timestamp expiryDate;
 
         for (String m : memberIds) {
-            String id = UUID.randomUUID().toString();
-            expiryDate = new Timestamp(DateUtils.addHours(new Date(), 1).getTime());
-            Token token = new Token();
+            String id=UUID.randomUUID().toString();
+            expiryDate=new Timestamp(DateUtils.addHours(new Date(),1).getTime());
+            Token token=new Token();
             token.setId(id);
             token.setTeamId(teamId);
             token.setExpiryDate(expiryDate);
             tokenRepo.save(token);
-            String address = "s" + m + "@studenti.polito.it";
-            String body = "CONFIRM participation to the team: " + URL_BASE + "/notifications/confirm/" + id +
-                    "\nREJECT participation to the team: " + URL_BASE + "/notifications/reject/" + id;
-            this.sendMessage(address, "Team proposal", body);
+            String address="s"+m+"@studenti.polito.it";
+            String body="CONFIRM participation to the team: "+URL_BASE+"/notifications/confirm/"+id+
+                    "\nREJECT participation to the team: "+URL_BASE+"/notifications/reject/"+id;
+            this.sendMessage(address,"Team proposal",body);
         }
 
+    }
+
+    public boolean isEverythingOk() {
+        return everythingOk;
     }
 }

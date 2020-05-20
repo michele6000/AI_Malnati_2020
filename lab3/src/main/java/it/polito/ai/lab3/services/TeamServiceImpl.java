@@ -353,6 +353,7 @@ public class TeamServiceImpl implements TeamService {
         if (!teamRepo.existsById(teamId))
             throw new TeamServiceException("Team not found!");
 
+        teamRepo.getOne(teamId).getMembers().forEach(s->teamRepo.getOne(teamId).removeMember(s));
         teamRepo.deleteById(teamId);
     }
 
@@ -396,6 +397,17 @@ public class TeamServiceImpl implements TeamService {
             return true;
         } else throw new TeamServiceException("Course not enabled");
 
+    }
+
+    @Override
+    public List<ProfessorDTO> getProfessors(String courseName) {
+        Optional<Course> optionalCourseEntity = courseRepo.findById(courseName);
+        if (!optionalCourseEntity.isPresent()) {
+            throw new CourseNotFoundException("Course not found!");
+        }
+        return courseRepo.getOne(courseName).getProfessors().stream()
+                .map(s -> modelMapper.map(s, ProfessorDTO.class))
+                .collect(Collectors.toList());
     }
 
 }

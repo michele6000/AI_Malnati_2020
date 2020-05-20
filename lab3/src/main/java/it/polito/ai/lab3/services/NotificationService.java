@@ -15,4 +15,6 @@ public interface NotificationService {
     void notifyTeam(TeamDTO dto, List<String> memberIds);
 
     void deleteExpiredTokens();
+
+    boolean isEverythingOk();
 }
