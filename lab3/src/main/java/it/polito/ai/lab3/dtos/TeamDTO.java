@@ -6,9 +6,8 @@ import org.springframework.hateoas.RepresentationModel;
 
 @Data
 public class TeamDTO {
-
-    private Long id;
-    private String name;
-    private int status;
-    private String courseName;
+  private Long id;
+  private String name;
+  private int status;
+  private String courseName;
 }
