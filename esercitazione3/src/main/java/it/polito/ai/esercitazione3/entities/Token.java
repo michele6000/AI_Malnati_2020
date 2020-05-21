@@ -1,16 +1,16 @@
 package it.polito.ai.esercitazione3.entities;
 
-import lombok.Data;
-
+import java.sql.Timestamp;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import java.sql.Timestamp;
+import lombok.Data;
 
 @Data
 @Entity
 public class Token {
-    @Id
-    private String id;
-    private Long teamId;
-    private Timestamp expiryDate;
+  @Id
+  private String id;
+
+  private Long teamId;
+  private Timestamp expiryDate;
 }

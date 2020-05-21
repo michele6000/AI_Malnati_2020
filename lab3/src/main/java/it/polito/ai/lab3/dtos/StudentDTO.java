@@ -6,11 +6,12 @@ import org.springframework.hateoas.RepresentationModel;
 
 @Data
 public class StudentDTO extends RepresentationModel<StudentDTO> {
+  @CsvBindByName
+  private String id;
 
-    @CsvBindByName
-    private String id;
-    @CsvBindByName
-    private String name;
-    @CsvBindByName
-    private String firstName;
+  @CsvBindByName
+  private String name;
+
+  @CsvBindByName
+  private String firstName;
 }
