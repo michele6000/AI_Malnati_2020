@@ -1,5 +1,6 @@
 <application>
   <component name="PathMacrosImpl">
+    <macro name="CATALINA_HOME" value="/Users/micheleluigigreco/apache-tomcat-9.0.33" />
     <macro name="KOTLIN_BUNDLED" value="/Users/micheleluigigreco/Library/Application Support/JetBrains/IntelliJIdea2020.1/plugins/Kotlin/kotlinc" />
     <macro name="MAVEN_REPOSITORY" value="/Users/micheleluigigreco/.m2/repository" />
   </component>
