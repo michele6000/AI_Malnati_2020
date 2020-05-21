@@ -1,6 +1,7 @@
 package it.polito.ai.lab3.entities;
 
 import lombok.Data;
+import net.minidev.json.annotate.JsonIgnore;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -28,8 +29,12 @@ public class Team {
 
 
     public void setCourse(Course course) {
-        if (course != null)
+        if (course != null) {
             this.course = course;
+            if(!course.getTeams().contains(this))
+                course.addTeam(this);
+        }
+
         else {
             this.course.getTeams().remove(this);
             this.course = null;

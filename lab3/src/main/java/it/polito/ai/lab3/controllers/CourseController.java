@@ -1,6 +1,7 @@
 package it.polito.ai.lab3.controllers;
 
 import it.polito.ai.lab3.dtos.CourseDTO;
+import it.polito.ai.lab3.dtos.ProfessorDTO;
 import it.polito.ai.lab3.dtos.StudentDTO;
 import it.polito.ai.lab3.dtos.TeamDTO;
 import it.polito.ai.lab3.exceptions.CourseNotFoundException;
@@ -20,6 +21,7 @@ import java.io.Reader;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/API/courses")
@@ -160,6 +162,24 @@ public class CourseController {
         try {
             List<StudentDTO> students = service.getStudentsInTeams(courseName);
             return students;
+        } catch (CourseNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
+
+    @GetMapping("/{teamId}/members")
+    public List<StudentDTO> getMembers(@PathVariable Long teamId) {
+        try {
+            return service.getMembers(teamId);
+        } catch (TeamServiceException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
+
+    @GetMapping("/{courseName}/professors")
+    public List<ProfessorDTO> getProfessors(@PathVariable String courseName) {
+        try {
+            return service.getProfessors(courseName);
         } catch (CourseNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }

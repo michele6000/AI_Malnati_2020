@@ -21,7 +21,6 @@ public interface TeamService {
     Optional<CourseDTO> getCourse(String name);
 
     @PreAuthorize("hasAnyRole('ROLE_STUDENT','ROLE_ADMIN','ROLE_PROFESSOR')")
-        //TO CHECK
     List<CourseDTO> getAllCourses();
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSOR')")
@@ -84,5 +83,8 @@ public interface TeamService {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     boolean addProfessorToCourse(String professorId, String courseName);
+
+    @PreAuthorize("hasAnyRole('ROLE_STUDENT','ROLE_ADMIN', 'ROLE_PROFESSOR')")
+    List<ProfessorDTO> getProfessors(String courseName);
 
 }
