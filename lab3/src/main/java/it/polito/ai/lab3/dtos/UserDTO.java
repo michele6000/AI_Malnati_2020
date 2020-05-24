@@ -5,8 +5,8 @@ import org.springframework.hateoas.RepresentationModel;
 
 @Data
 public class UserDTO {
-    Long id;
-    String username;
-    String password;
-    String role;
+  Long id;
+  String username;
+  String password;
+  String role;
 }
