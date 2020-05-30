@@ -1,0 +1,16 @@
+/* You can add global styles to this file, and also import other style files */
+/*@import '~@angular/material/_theming.scss';*/
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+mat-sidenav-container { margin: 20px; height: 100%;}
+mat-list-item { margin-right: 20px;}
+mat-icon{cursor:pointer}
+mat-toolbar.title{font-weight: bold}
+table {width: 97%; margin: 20px;}
+.form {margin: 20px}
+button.delete{margin-left:20px}
+h2.title{margin:20px; font-weight: bold}
+span.span{margin-left:1%}
+.form{width:30%}
