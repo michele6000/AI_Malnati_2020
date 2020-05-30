@@ -1,0 +1,124 @@
+<mat-toolbar color="primary">
+  <mat-icon (click)="toggleForMenuClick()" style="cursor: pointer">menu</mat-icon>
+  <span style="margin-left: 5px">VirtualLabs</span>
+</mat-toolbar>
+
+<mat-toolbar>
+  <span>Applicazioni Internet</span>
+</mat-toolbar>
+
+<mat-sidenav-container>
+  <mat-sidenav #sidenav mode="side" opened="true" position="start">
+    <div class="container">
+      <mat-nav-list>
+        <mat-list-item>
+          <span> Applicazioni Internet </span>
+        </mat-list-item>
+        <mat-list-item>
+          <span> Programmazione di Sistema</span>
+        </mat-list-item>
+      </mat-nav-list>
+    </div>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <mat-tab-group>
+
+      <mat-tab label="Studenti">
+        <div class="container">
+
+          <section class="mat-typography">
+            <h2 style="margin: 20px">Studenti iscritti al corso</h2>
+
+            <form class="myForm">
+              <mat-form-field class="full-width">
+                <label>
+                  <input #inputStud
+                         [formControl]="myControl"
+                         [matAutocomplete]="auto"
+                         matInput
+                         placeholder="Add Student"
+                         type="text">
+                </label>
+                <mat-autocomplete #auto="matAutocomplete"
+                                  (optionSelected)="addStudent($event.option.value)"
+                                  [displayWith]="displayOptions"
+                                  autoActiveFirstOption>
+                  <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                    <span>{{option.name}} {{option.firstName}} </span>
+                    <span>{{option.id}}</span>
+                  </mat-option>
+                </mat-autocomplete>
+              </mat-form-field>
+              <button (click)="addStudentToDB()" mat-button
+                      style="margin-left: 20px; width: 15%">Add Student
+              </button>
+            </form>
+
+            <button (click)="deleteStudents()" mat-button style="margin-left: 20px">Delete selection</button>
+
+            <table #MatTable [dataSource]="dataSource" class="mat-elevation-z8" mat-table matSort>
+              <ng-container matColumnDef="select">
+                <th *matHeaderCellDef mat-header-cell>
+                  <mat-checkbox (change)="$event ? masterToggle() : null"
+                                [aria-label]="checkboxLabel()"
+                                [checked]="selection.hasValue() && isAllSelected()"
+                                [indeterminate]="selection.hasValue() && !isAllSelected()">
+                  </mat-checkbox>
+                </th>
+                <td *matCellDef="let row" mat-cell>
+                  <mat-checkbox (change)="$event ? selection.toggle(row) : null"
+                                (click)="$event.stopPropagation()"
+                                [aria-label]="checkboxLabel(row)"
+                                [checked]="selection.isSelected(row)">
+                  </mat-checkbox>
+                </td>
+              </ng-container>
+
+              <!-- Id Column -->
+              <ng-container matColumnDef="id">
+                <th *matHeaderCellDef mat-header-cell mat-sort-header> Id</th>
+                <td *matCellDef="let row" mat-cell> {{row.id}} </td>
+              </ng-container>
+
+              <!-- Name Column -->
+              <ng-container matColumnDef="name">
+                <th *matHeaderCellDef mat-header-cell mat-sort-header> Name</th>
+                <td *matCellDef="let row" mat-cell> {{row.name}}</td>
+              </ng-container>
+
+              <!-- FirstName Column -->
+              <ng-container matColumnDef="firstName">
+                <th *matHeaderCellDef mat-header-cell mat-sort-header> First Name</th>
+                <td *matCellDef="let row" mat-cell> {{row.firstName}} </td>
+              </ng-container>
+
+              <!-- FirstName Column -->
+              <ng-container matColumnDef="group">
+                <th *matHeaderCellDef mat-header-cell mat-sort-header> Group</th>
+                <td *matCellDef="let row" mat-cell> {{row.group}} </td>
+              </ng-container>
+
+
+              <tr *matHeaderRowDef="columnsToDisplay" mat-header-row style="background-color: cyan"></tr>
+              <tr *matRowDef="let row; columns: columnsToDisplay;" mat-row></tr>
+            </table>
+            <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+
+          </section>
+        </div>
+      </mat-tab>
+
+      <mat-tab label="Gruppi">
+        <div class="container">
+          <section class="mat-typography">
+            <h2 style="margin: 20px">Gestione gruppi del corso</h2>
+          </section>
+        </div>
+      </mat-tab>
+
+    </mat-tab-group>
+  </mat-sidenav-content>
+</mat-sidenav-container>
+
+
