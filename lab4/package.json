@@ -1,11 +1,10 @@
 {
-  "name": "esercitazione4",
+  "name": "lab4",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
-    "prettify-all": "node_modules/.bin/prettier --write ./src/app/*.{ts,css}",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
@@ -22,7 +21,7 @@
     "@angular/platform-browser": "~9.1.9",
     "@angular/platform-browser-dynamic": "~9.1.9",
     "@angular/router": "~9.1.9",
-    "npm": "^6.14.5",
+    "nvm": "0.0.4",
     "rxjs": "~6.5.4",
     "tslib": "^1.10.0",
     "zone.js": "~0.10.2"
@@ -45,16 +44,6 @@
     "protractor": "~7.0.0",
     "ts-node": "~8.3.0",
     "tslint": "~6.1.0",
-    "typescript": "~3.8.3",
-    "prettier": "2.0.2"
-  },
-  "prettier": {
-    "printWidth": 80,
-    "trailingComma": "none",
-    "tabWidth": 2,
-    "semi": true,
-    "singleQuote": true,
-    "arrowParens": "avoid",
-    "endOfLine": "lf"
+    "typescript": "~3.8.3"
   }
 }
