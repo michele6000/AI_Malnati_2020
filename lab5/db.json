@@ -1,0 +1,101 @@
+{
+  "students": [
+    {
+      "id": "s253309",
+      "name": "Burlacu",
+      "firstName": "Iustin",
+      "group": "",
+      "courseId": 1
+    },
+    {
+      "id": "s247948",
+      "name": "Buffo",
+      "firstName": "Matteo",
+      "group": "",
+      "courseId": 0
+    },
+    {
+      "id": "s222767",
+      "name": "Massafra ",
+      "firstName": "Christian",
+      "group": "",
+      "courseId": 0
+    },
+    {
+      "id": "s236564",
+      "name": "Lamberti",
+      "firstName": "Giovanni",
+      "group": "",
+      "courseId": 1
+    },
+    {
+      "id": "s257009",
+      "name": "Caso",
+      "firstName": "Paola",
+      "group": "",
+      "courseId": 1
+    },
+    {
+      "id": "s378748",
+      "name": "Agosta",
+      "firstName": "Anna",
+      "group": "",
+      "courseId": 0
+    },
+    {
+      "id": "s256665",
+      "name": "Greco",
+      "firstName": "Michele",
+      "group": "",
+      "courseId": 0
+    },
+    {
+      "id": "s238906",
+      "name": "Bruno",
+      "firstName": "Alberto",
+      "group": "",
+      "courseId": 1
+    },
+    {
+      "id": "s234456",
+      "name": "De Giovanni",
+      "firstName": "Andrea",
+      "group": "",
+      "courseId": 0
+    },
+    {
+      "id": "s256664",
+      "name": "Cocca",
+      "firstName": "Mirella",
+      "group": "",
+      "courseId": 0
+    },
+    {
+      "id": "s479238",
+      "name": "Bruno",
+      "firstName": "Domenico",
+      "group": "",
+      "courseId": 0
+    }
+  ],
+  "courses": [
+    {
+      "id": 1,
+      "name": "Applicazioni Internet",
+      "path": "applicazioni-internet"
+    }
+  ],
+  "groups": [
+    {
+      "id": 1,
+      "name": "Calvary"
+    }
+  ],
+  "users": [
+    {
+      "email": "olivier@mail.com",
+      "password": "$2a$10$9SFIVF0tDrwRoUlZOo9Q0urEs0cnpBXu9RWGf/TxuHjFzDteQhvDW",
+      "id": 1
+    }
+  ]
+}

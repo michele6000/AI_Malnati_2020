@@ -9,7 +9,6 @@ import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatListModule} from '@angular/material/list';
 import {MatTabsModule} from '@angular/material/tabs';
-import {Student} from './student/student.model';
 import {MatTableModule} from '@angular/material/table';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatButtonModule} from '@angular/material/button';
@@ -19,10 +18,25 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatInputModule} from '@angular/material/input';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatSortModule} from '@angular/material/sort';
+import { StudentsComponent } from './teacher/students.component';
+import { StudentsContComponent } from './teacher/students-cont.component';
+import { HomeComponent } from './teacher/home.component';
+import { PageNotFoundComponent } from './teacher/page-not-found.component';
+import { VmsContComponent } from './teacher/vms-cont.component';
+import {HttpClient, HttpClientModule} from '@angular/common/http';
+import {MatDialogModule} from '@angular/material/dialog';
+import {MatCardModule} from '@angular/material/card';
+import { LoginDialogComponent } from './auth/login-dialog.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    StudentsComponent,
+    StudentsContComponent,
+    HomeComponent,
+    PageNotFoundComponent,
+    VmsContComponent,
+    LoginDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -43,6 +57,9 @@ import {MatSortModule} from '@angular/material/sort';
     FormsModule,
     MatPaginatorModule,
     MatSortModule,
+    HttpClientModule,
+    MatDialogModule,
+    MatCardModule
   ],
   providers: [],
   bootstrap: [AppComponent]
