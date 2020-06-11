@@ -1,0 +1,87 @@
+{
+  "students": [
+    {
+      "id": "s267612",
+      "name": "Andrea",
+      "firstName": "Saltarelli",
+      "group": "Prova",
+      "courseId": 1
+    },
+    {
+      "id": "s267611",
+      "name": "Edoardo",
+      "firstName": "Argano",
+      "group": "",
+      "courseId": 1
+    },
+    {
+      "id": "s267610",
+      "name": "Michele Luigi ",
+      "firstName": "Greco",
+      "group": "",
+      "courseId": 1
+    },
+    {
+      "id": "s267600",
+      "name": "Iustin",
+      "firstName": "Burlacu",
+      "group": "",
+      "courseId": 1
+    },
+    {
+      "id": "s267602",
+      "name": "Paola",
+      "firstName": "Caso",
+      "group": "",
+      "courseId": 1
+    },
+    {
+      "id": "s250444",
+      "name": "Alberto",
+      "firstName": "Bruno",
+      "group": "",
+      "courseId": 1
+    },
+    {
+      "id": "s250555",
+      "name": "Matteo",
+      "firstName": "Buffo",
+      "group": "",
+      "courseId": 0
+    },
+    {
+      "id": "s250533",
+      "name": "Federica",
+      "firstName": "Alonge",
+      "group": "",
+      "courseId": 1
+    },
+    {
+      "id": "s250553",
+      "name": "Klaus",
+      "firstName": "Cuko",
+      "group": "",
+      "courseId": 1
+    }
+  ],
+  "courses": [
+    {
+      "id": 1,
+      "name": "Applicazioni Internet",
+      "path": "applicazioni-internet"
+    }
+  ],
+  "groups": [
+    {
+      "id": 1,
+      "name": "Calvary"
+    }
+  ],
+  "users": [
+    {
+      "email": "olivier@mail.com",
+      "password": "$2a$10$9SFIVF0tDrwRoUlZOo9Q0urEs0cnpBXu9RWGf/TxuHjFzDteQhvDW",
+      "id": 1
+    }
+  ]
+}
