@@ -5,7 +5,13 @@ export class Student {
   group: string;
   courseId: number;
 
-  constructor(id: string, firstName: string, name: string, group: string, courseId: number) {
+  constructor(
+    id: string,
+    firstName: string,
+    name: string,
+    group: string,
+    courseId: number
+  ) {
     this.id = id;
     this.name = name;
     this.firstName = firstName;
@@ -13,5 +19,3 @@ export class Student {
     this.courseId = courseId;
   }
 }
-
-

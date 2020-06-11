@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewChild
+} from '@angular/core';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { Student } from '../student/student.model';
 import { MatPaginator } from '@angular/material/paginator';
@@ -14,14 +21,13 @@ import { map, startWith } from 'rxjs/operators';
   styleUrls: ['./students.component.css']
 })
 export class StudentsComponent implements OnInit {
-
   @ViewChild('MatTable')
   table: MatTable<Student>;
   _enrolledStudents: Student[];
 
   @Input()
-  set enrolledStudents(students: Student[]){
-    this._enrolledStudents = students ;
+  set enrolledStudents(students: Student[]) {
+    this._enrolledStudents = students;
     delete this.dataSource;
     this.dataSource = new MatTableDataSource<Student>(this._enrolledStudents);
     this.dataSource.paginator = this.paginator;
@@ -34,14 +40,15 @@ export class StudentsComponent implements OnInit {
       )
     );
   }
-  get enrolledStudents(){return this._enrolledStudents ; }
+  get enrolledStudents() {
+    return this._enrolledStudents;
+  }
   @Input() options: Student[] = [];
   @Output() addStudentE = new EventEmitter<Student>();
   @Output() deleteStudentE = new EventEmitter<Student[]>();
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
-
 
   columnsToDisplay: string[] = ['select', 'id', 'name', 'firstName', 'group'];
   student: Student;
@@ -100,8 +107,6 @@ export class StudentsComponent implements OnInit {
       row.id + 1
     }`;
   }
-
-
 
   displayOptions(option: Student): string {
     return option

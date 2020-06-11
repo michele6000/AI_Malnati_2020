@@ -11,28 +11,36 @@ export class StudentsContComponent implements OnInit {
   STUDENT_DATA: Student[] = [];
   STUDENT_OPTIONS: Student[] = [];
 
-
-  constructor(private studentService: StudentService) {
-  }
+  constructor(private studentService: StudentService) {}
 
   ngOnInit(): void {
-    this.studentService.listEnrolledStudents(1).subscribe(value => this.STUDENT_DATA = value);
-    this.studentService.query().subscribe(value => this.STUDENT_OPTIONS = value);
+    this.studentService
+      .listEnrolledStudents(1)
+      .subscribe(value => (this.STUDENT_DATA = value));
+    this.studentService
+      .query()
+      .subscribe(value => (this.STUDENT_OPTIONS = value));
   }
 
-  onAddStudent(student: Student){
-    this.studentService.updateEnrolled([student], 1)
-      .subscribe( s => {
-        this.studentService.listEnrolledStudents(1).subscribe(value => this.STUDENT_DATA = value);
-        this.studentService.query().subscribe(value => this.STUDENT_OPTIONS = value);
-      });
+  onAddStudent(student: Student) {
+    this.studentService.updateEnrolled([student], 1).subscribe(s => {
+      this.studentService
+        .listEnrolledStudents(1)
+        .subscribe(value => (this.STUDENT_DATA = value));
+      this.studentService
+        .query()
+        .subscribe(value => (this.STUDENT_OPTIONS = value));
+    });
   }
 
-  onDeleteStudent(students: Student[]){
-    this.studentService.updateEnrolled(students, 0)
-      .subscribe( s => {
-        this.studentService.listEnrolledStudents(1).subscribe(value => this.STUDENT_DATA = value);
-        this.studentService.query().subscribe(value => this.STUDENT_OPTIONS = value);
-      });
+  onDeleteStudent(students: Student[]) {
+    this.studentService.updateEnrolled(students, 0).subscribe(s => {
+      this.studentService
+        .listEnrolledStudents(1)
+        .subscribe(value => (this.STUDENT_DATA = value));
+      this.studentService
+        .query()
+        .subscribe(value => (this.STUDENT_OPTIONS = value));
+    });
   }
 }

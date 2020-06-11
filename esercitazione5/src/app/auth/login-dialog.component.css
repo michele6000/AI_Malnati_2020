@@ -1,13 +1,13 @@
-.dimensioni{
+.dimensioni {
   width: 400px;
   height: 250px;
   box-shadow: none;
 }
-.posizione{
+.posizione {
   width: 90%;
   margin-bottom: 15px;
 }
-.center{
+.center {
   margin-top: 10px;
   text-align: center;
 }
