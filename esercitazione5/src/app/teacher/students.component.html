@@ -1,0 +1,86 @@
+<div class="container">
+
+  <section class="mat-typography">
+    <h2 style="margin: 20px">Studenti iscritti al corso</h2>
+
+    <form class="myForm">
+      <mat-form-field class="full-width">
+        <label>
+          <input #inputStud
+                 [formControl]="myControl"
+                 [matAutocomplete]="auto"
+                 matInput
+                 placeholder="Add Student"
+                 type="text">
+        </label>
+        <mat-autocomplete #auto="matAutocomplete"
+                          (optionSelected)="addStudent($event.option.value)"
+                          [displayWith]="displayOptions"
+                          autoActiveFirstOption>
+          <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+            <span>{{option.name}} {{option.firstName}} </span>
+            <span>{{option.id}}</span>
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+      <button (click)="addStudentToDB()" mat-icon-button style="margin-left: 20px;" matTooltip="Add selected student to course">
+        <mat-icon style="color: limegreen">add_circle</mat-icon>
+      </button>
+    </form>
+
+
+
+    <table #MatTable [dataSource]="dataSource" class="mat-elevation-z8" mat-table matSort>
+      <ng-container matColumnDef="select">
+        <th style="width: 70px" *matHeaderCellDef mat-header-cell>
+          <mat-checkbox (change)="$event ? masterToggle() : null"
+                        [aria-label]="checkboxLabel()"
+                        [checked]="selection.hasValue() && isAllSelected()"
+                        [indeterminate]="selection.hasValue() && !isAllSelected()"
+                        matTooltip="Select/Unselect all">
+          </mat-checkbox>
+          <button style="margin-left: 5px" mat-icon-button color="warn" matTooltip="Delete selected student(s)" (click)="deleteStudents()">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </th>
+        <td *matCellDef="let row" mat-cell>
+          <mat-checkbox (change)="$event ? selection.toggle(row) : null"
+                        (click)="$event.stopPropagation()"
+                        [aria-label]="checkboxLabel(row)"
+                        [checked]="selection.isSelected(row)">
+          </mat-checkbox>
+        </td>
+      </ng-container>
+
+      <!-- Id Column -->
+      <ng-container matColumnDef="id">
+        <th *matHeaderCellDef mat-header-cell mat-sort-header style="font-size: 16px"> Id</th>
+        <td *matCellDef="let row" mat-cell> {{row.id}} </td>
+      </ng-container>
+
+      <!-- Name Column -->
+      <ng-container matColumnDef="name">
+        <th *matHeaderCellDef mat-header-cell mat-sort-header style="font-size: 16px" > Name</th>
+        <td *matCellDef="let row" mat-cell> {{row.name}}</td>
+      </ng-container>
+
+      <!-- FirstName Column -->
+      <ng-container matColumnDef="firstName">
+        <th *matHeaderCellDef mat-header-cell mat-sort-header style="font-size: 16px" > First Name</th>
+        <td *matCellDef="let row" mat-cell> {{row.firstName}} </td>
+      </ng-container>
+
+      <!-- FirstName Column -->
+      <ng-container matColumnDef="group">
+        <th *matHeaderCellDef mat-header-cell mat-sort-header style="font-size: 16px" > Group</th>
+        <td *matCellDef="let row" mat-cell> {{row.group}} </td>
+      </ng-container>
+
+
+      <tr *matHeaderRowDef="columnsToDisplay" mat-header-row style="background-color: cyan"></tr>
+      <tr *matRowDef="let row; columns: columnsToDisplay;" mat-row></tr>
+    </table>
+    <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+
+  </section>
+</div>
