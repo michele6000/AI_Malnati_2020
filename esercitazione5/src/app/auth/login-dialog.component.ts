@@ -16,12 +16,11 @@ export class LoginDialogComponent implements OnInit {
     dialogRef: MatDialogRef<LoginDialogComponent>
   ) {
     auth.userLogged.subscribe(
-      // ascolto l'evento della login generato nel auth.service
       user => {
         if (user) {
-          dialogRef.close(true); // chiudo il dialog se login OK -> ascolto l'evento in home.ts
+          dialogRef.close(true);
         } else {
-          this.error = true; // show credenziali errate nel dialog
+          this.error = true;
         }
       }
     );

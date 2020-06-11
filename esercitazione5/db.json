@@ -5,7 +5,7 @@
       "name": "Andrea",
       "firstName": "Saltarelli",
       "group": "Prova",
-      "courseId": 1
+      "courseId": 0
     },
     {
       "id": "s267611",
@@ -19,7 +19,7 @@
       "name": "Michele Luigi ",
       "firstName": "Greco",
       "group": "",
-      "courseId": 1
+      "courseId": 0
     },
     {
       "id": "s267600",
@@ -33,14 +33,14 @@
       "name": "Paola",
       "firstName": "Caso",
       "group": "",
-      "courseId": 1
+      "courseId": 0
     },
     {
       "id": "s250444",
       "name": "Alberto",
       "firstName": "Bruno",
       "group": "",
-      "courseId": 1
+      "courseId": 0
     },
     {
       "id": "s250555",
@@ -54,14 +54,14 @@
       "name": "Federica",
       "firstName": "Alonge",
       "group": "",
-      "courseId": 1
+      "courseId": 0
     },
     {
       "id": "s250553",
       "name": "Klaus",
       "firstName": "Cuko",
       "group": "",
-      "courseId": 1
+      "courseId": 0
     }
   ],
   "courses": [

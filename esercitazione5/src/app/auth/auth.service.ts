@@ -45,7 +45,7 @@ export class AuthService {
           this.userLogged.emit(true);
         },
         (error: any) => {
-          this.userLogged.emit(false); // propago l'evento se non è andato a buon fine la login -> in login.ts lo ascolto nel costruttore
+          this.userLogged.emit(false);
         }
       );
   }
@@ -53,7 +53,7 @@ export class AuthService {
   logout() {
     localStorage.removeItem('email');
     localStorage.removeItem('token');
-    this.userSubject.next(null); // svuoto l'observable
+    this.userSubject.next(null);
   }
 
   getUser() {

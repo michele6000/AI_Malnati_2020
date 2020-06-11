@@ -28,10 +28,9 @@ export class HomeComponent implements OnInit {
       if (params.has('doLogin') && params.get('doLogin') === 'true') {
         this.dialog
           .open(LoginDialogComponent, { disableClose: true })
-          .afterClosed() // dopo la chiusura del dialog faccio le redirect
+          .afterClosed()
           .subscribe(result => {
             if (result) {
-              // se result è false => click su CANCEL
               const myurl = this.auth.getUrl();
               if (myurl != null) {
                 this.auth.deleteUrl();
