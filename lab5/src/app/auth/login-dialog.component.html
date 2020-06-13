@@ -1,0 +1,26 @@
+<mat-card class="card">
+  <mat-card-header>
+    <mat-card-title class="card-title">Login</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <mat-error class="center" *ngIf="error">Credenziali errate!</mat-error>
+    <form #f="ngForm"  (ngSubmit)="login(f)" >
+      <mat-form-field class="form-field">
+        <mat-label>E-mail</mat-label>
+        <input matInput type="email" #email="ngModel" ngModel required email placeholder="E-mail" name="email" value="">
+        <mat-error *ngIf="email.invalid">Email non valida!</mat-error>
+        <mat-error *ngIf="email.dirty && email.touched">Email obbligatoria!</mat-error>
+      </mat-form-field>
+      <br>
+      <mat-form-field class="form-field">
+        <mat-label>Password</mat-label>
+        <input matInput type="password" #password="ngModel" ngModel required minlength="6" name="password" value="">
+        <mat-error *ngIf="password.dirty && password.touched">Password obbligatoria!</mat-error>
+      </mat-form-field>
+      <mat-card-actions class="actions">
+        <button style="margin-left:21px; min-width:75px" [disabled]="!f.valid" mat-raised-button color="primary">Login</button>
+        <button [routerLink]="['/home']" mat-raised-button mat-dialog-close>Cancel</button>
+      </mat-card-actions>
+    </form>
+  </mat-card-content>
+</mat-card>

@@ -1,0 +1,39 @@
+<mat-card class="example-card dimensioni">
+  <mat-card-header class="card-container">
+    <mat-card-title>Login</mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content>
+    <mat-error class="center" *ngIf="error">
+      Wrong username or password!
+    </mat-error>
+    <form #f="ngForm" class="example-form" (ngSubmit)="login(f)">
+
+      <mat-form-field class="posizione">
+        <mat-label>Email</mat-label>
+        <input matInput type="email" #email="ngModel" ngModel required email placeholder="Email" name="email" value="">
+        <mat-error *ngIf="email.invalid">
+          Please insert a valid email
+        </mat-error>
+      </mat-form-field>
+      <br>
+
+      <mat-form-field class="posizione">
+        <mat-label>Password</mat-label>
+        <input matInput type="password" #password="ngModel" ngModel required minlength="6" name="password" value="">
+        <mat-error *ngIf="password.value.length==0">
+          Please insert a password
+        </mat-error>
+        <mat-error *ngIf="password.value.length>0 && password.value.length<7 ">
+          Please insert a valid password
+        </mat-error>
+      </mat-form-field>
+
+      <mat-card-actions class="card-container">
+        <button mat-button [disabled]="!f.valid" mat-raised-button color="primary">Login</button>
+        <button mat-button color="warn" [routerLink]="['/homepage']"  mat-dialog-close>Cancel</button>
+      </mat-card-actions>
+
+    </form>
+  </mat-card-content>
+</mat-card>

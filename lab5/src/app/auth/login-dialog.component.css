@@ -1,0 +1,27 @@
+.card{
+  min-width: 350px;
+  min-height: 240px;
+  box-shadow: none;
+}
+
+.card-title{
+  font-weight: bold;
+}
+
+.form-field{
+  width: 90%;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  margin-left: 16px;
+}
+.center{
+  margin: 10px;
+  text-align: center;
+}
+
+.actions{margin-bottom: 0px;}
+
+
+
+
+

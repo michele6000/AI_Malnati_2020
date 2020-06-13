@@ -1,0 +1,12 @@
+.float-right {
+  float: right;
+}
+.position {
+  margin: 5px 20px 0 0;
+}
+.pointer {
+  cursor: pointer;
+}
+.example-fill-remaining-space {
+  flex: 1 1 auto;
+}

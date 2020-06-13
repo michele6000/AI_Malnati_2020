@@ -4,6 +4,7 @@ export class Student{
   name: string;
   firstName: string;
   group: string;
+  courseId: number;
 
 
   constructor(id: string, name: string, firstName: string) {
